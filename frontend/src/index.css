@@ -1,13 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&family=Edu+TAS+Beginner&family=Heebo:wght@300&family=Montserrat:wght@100&family=Raleway:ital,wght@0,300;0,500;1,400&display=swap");
+
+* {
+  font-family: "Heebo", sans-serif;
+  font-weight: 800;
+}
+
+:root {
+  --var--dark--green: #223730;
+  --var--dark--lighter-green: #2a5355;
+  --var--yellow--green: #547f6b;
+  --var--light--pastel--green: #7d886a;
+  --var--white: #f0ede6;
+  --var--light--skin--colour: #e6dcd3;
+  --var--ciocolatte: #b8a596;
+  --var--coconut--macadamia: #9a837d;
+  --var--dark--brown: #766760;
+  --var--stawberry--purple: #7d4453;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
