@@ -7,6 +7,11 @@
   width: 4rem;
   top: 2rem;
   left: 2rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.menuBtn:hover {
+  cursor: pointer;
 }
 
 .sidebarContainer {
@@ -16,6 +21,7 @@
   bottom: 0;
   background-color: var(--var--dark--lighter-green);
 }
+
 .icon {
   height: 3rem;
   width: 3rem;
@@ -23,4 +29,6 @@
 
 .content {
   background-color: var(--var--dark--lighter-green);
+  color: var(--var--light--skin--colour);
+  height: 100%;
 }

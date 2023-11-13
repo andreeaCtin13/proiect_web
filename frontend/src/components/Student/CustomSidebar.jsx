@@ -4,8 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
-import Button from '../General/Button';
 import style from "../../styles/CustomSidebar.module.css"
+
+import {Link} from "react-router-dom"
 function CustomSidebar() {
   const [visible, setVisible] = useState(false);
 
@@ -21,7 +22,7 @@ function CustomSidebar() {
         className={style.sidebarContainer}
       >
         <div className={style.content}>
-wefwfe
+        {/* <Link ></Link> */}
         </div>
       </Sidebar>
 
