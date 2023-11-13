@@ -5,7 +5,7 @@ import CustomSidebar from "../components/Student/CustomSidebar";
 function LandingPage() {
   return (
     <div className={style.mainContainer}>
-              <CustomSidebar></CustomSidebar>
+      <CustomSidebar></CustomSidebar>
 
       <img
         className={style.logo}

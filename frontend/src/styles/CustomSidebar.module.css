@@ -1,0 +1,26 @@
+.menuBtn {
+  background-color: var(--var--dark--lighter-green);
+  padding: 1rem;
+  border-radius: 100%;
+  position: fixed;
+  height: 4rem;
+  width: 4rem;
+  top: 2rem;
+  left: 2rem;
+}
+
+.sidebarContainer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--var--dark--lighter-green);
+}
+.icon {
+  height: 3rem;
+  width: 3rem;
+}
+
+.content {
+  background-color: var(--var--dark--lighter-green);
+}
