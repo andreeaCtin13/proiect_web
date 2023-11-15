@@ -1,11 +1,9 @@
 import React from "react";
 import style from "../styles/LandingPage.module.css";
 import Button from "../components/General/Button";
-import CustomSidebar from "../components/Student/CustomSidebar";
 function LandingPage() {
   return (
     <div className={style.mainContainer}>
-      <CustomSidebar></CustomSidebar>
 
       <img
         className={style.logo}
