@@ -1,0 +1,18 @@
+.formRow {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.input {
+  border-radius: 2rem;
+  padding: 0.5rem;
+  width: 20rem;
+}

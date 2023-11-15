@@ -1,0 +1,45 @@
+.mainContainer {
+  overflow: hidden;
+}
+
+.backgroundImage {
+  background-position: center;
+  max-height: 100vh;
+  position: relative;
+}
+
+.form {
+  position: absolute;
+  top: 30%;
+  left: 20%;
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.btnLogin {
+  background-color: var(--var--dark--brown);
+  color: var(--var--white);
+  transition: 0.5s;
+}
+
+.btnRegister {
+  border: 2px solid var(--var--dark--brown);
+  color: var(--var--dark--brown);
+  transition: 0.5s;
+}
+
+.btnRegister:hover,
+.btnLogin:hover {
+  cursor: pointer;
+  transition: 0.5s;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.link {
+  text-decoration: none;
+}
+
+.btnZone {
+  display: flex;
+  gap: 1rem;
+}
