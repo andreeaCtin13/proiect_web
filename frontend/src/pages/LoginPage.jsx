@@ -10,20 +10,38 @@ function LoginPage() {
     const onChange =(e, name)=>{
         setUserInfo({...userInfo, [name.toLowerCase()]:e.target.value})
     }
-
     const fields=[
         {
             inputType: "text",
             labelName: "Mail",
+            name:"mail",
+            change:false,
             onChangeAction: onChange,
         },
         {
             inputType: "password",
             labelName: "Password",
+            name: "password",
+            change:false,
             onChangeAction: onChange,
+        },
+        {
+          inputType:"radio",
+          labelName:"Teacher",
+          name:"userType",
+          change:true,
+          onChange:onChange
+        },
+        {
+          inputType:"radio",
+          labelName:"Student",
+          name:"userType",
+          change:true,
+          onChange:onChange
         }
     ]
-
+    
+  console.log(userInfo)
   return (
     <div className={style.mainContainer}>
       <img src={BackgroundImage} alt="imagine-background" className={style.backgroundImage} />

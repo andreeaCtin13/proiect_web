@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 function LandingPage() {
   return (
     <div className={style.mainContainer}>
-
       <img
         className={style.logo}
         src="https://th.bing.com/th/id/OIP.nHB3f94fM0KpmCejJFRc3QHaH2?pid=ImgDet&rs=1"
@@ -15,7 +14,7 @@ function LandingPage() {
         <div  className={style.intro}>
         <span><i>Hello, I'm</i></span>
         <i>
-        <h1 datatext="Ellan">Ellan</h1>
+        <h1 datatext="Ellean">Ellean</h1>
         </i>
         </div>
         <div className={style.description}>
