@@ -1,6 +1,7 @@
 import React from "react";
 import style from "../styles/LandingPage.module.css";
 import Button from "../components/General/Button";
+import { Link } from "react-router-dom";
 function LandingPage() {
   return (
     <div className={style.mainContainer}>
@@ -23,8 +24,12 @@ function LandingPage() {
       </div>
       
       <div className={style.buttonsZone}>
-        <Button className={style.btnType1} content={"Login"}></Button>
-        <Button className={style.btnType2} content={"Create Account"}></Button>
+        <Link to="/login" className={style.link}>
+          <Button className={style.btnType1} content={"Login"}></Button>
+        </Link>
+        <Link to="/register" className={style.link}>
+          <Button className={style.btnType2} content={"Create Account"}></Button>
+        </Link>
       </div>
     </div>
   );

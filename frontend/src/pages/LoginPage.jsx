@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import BackgroundImage from "../images/login-register-image.jpg"
-import style from "../styles/student/LoginPage.module.css"
+import style from "../styles/LoginPage.module.css"
 import Form from '../components/General/Form'
 import Button from '../components/General/Button'
 import { Link } from 'react-router-dom'
@@ -24,7 +24,6 @@ function LoginPage() {
         }
     ]
 
-    console.log(userInfo)
   return (
     <div className={style.mainContainer}>
       <img src={BackgroundImage} alt="imagine-background" className={style.backgroundImage} />

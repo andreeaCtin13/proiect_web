@@ -62,6 +62,10 @@ h1:before {
   }
 }
 
+.link {
+  text-decoration: none;
+}
+
 .btnType1 {
   border: 2px solid var(--var--stawberry--purple);
   color: var(--var--stawberry--purple);
