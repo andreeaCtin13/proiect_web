@@ -1,0 +1,23 @@
+.mainContainer {
+  padding: 6rem 5rem 5rem 5rem;
+  display: flex;
+  background-color: var(--var--light--skin--colour);
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.h2 {
+  font-family: "Dancing Script", cursive;
+  color: var(--var--stawberry--purple);
+  font-size: 3rem;
+}
+
+.loadingSection {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  justify-content: center;
+}

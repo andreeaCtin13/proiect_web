@@ -25,20 +25,6 @@ function LoginPage() {
             change:false,
             onChangeAction: onChange,
         },
-        {
-          inputType:"radio",
-          labelName:"Teacher",
-          name:"userType",
-          change:true,
-          onChange:onChange
-        },
-        {
-          inputType:"radio",
-          labelName:"Student",
-          name:"userType",
-          change:true,
-          onChange:onChange
-        }
     ]
     
   console.log(userInfo)

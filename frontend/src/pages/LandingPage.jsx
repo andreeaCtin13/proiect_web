@@ -14,7 +14,7 @@ function LandingPage() {
         <div  className={style.intro}>
         <span><i>Hello, I'm</i></span>
         <i>
-        <h1 datatext="Ellean">Ellean</h1>
+        <h1 className={style.h1} datatext="Ellean">Ellean</h1>
         </i>
         </div>
         <div className={style.description}>

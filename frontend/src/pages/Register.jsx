@@ -24,6 +24,20 @@ function Register() {
       inputType: "password",
       labelName:"Confirm Password",
       onChange: onChange
+    },
+    {
+      inputType:"radio",
+      labelName:"Teacher",
+      name:"userType",
+      change:true,
+      onChange:onChange
+    },
+    {
+      inputType:"radio",
+      labelName:"Student",
+      name:"userType",
+      change:true,
+      onChange:onChange
     }
 ]
   return (

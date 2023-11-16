@@ -1,19 +1,21 @@
 .mainContainer {
   overflow: hidden;
+  background-color: var(--var--ciocolatte);
 }
 
 .backgroundImage {
   background-position: center;
   max-height: 100vh;
   position: relative;
+  margin: 0;
 }
-
 .form {
   position: absolute;
-  top: 20%;
+  top: 10%;
   left: 20%;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 1rem;
+  background-color: var(--var--ciocolatte);
 }
 
 .btnLogin {
@@ -41,5 +43,6 @@
 
 .btnZone {
   display: flex;
+  justify-content: center;
   gap: 1rem;
 }

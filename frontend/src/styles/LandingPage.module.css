@@ -1,8 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script&family=Edu+TAS+Beginner&family=Montserrat:wght@100&family=Raleway:ital,wght@0,300;0,500;1,400&display=swap");
-* {
+.mainContainer {
   margin: 0 auto;
   padding: 0;
   background: var(--var--light--skin--colour);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 .intro {
@@ -11,6 +16,7 @@
   align-items: center;
   width: fit-content;
   gap: 2rem;
+  margin: 0;
   justify-content: center;
   color: var(--var--dark--brown);
   font-size: 2rem;
@@ -27,17 +33,7 @@
   height: 5rem;
 }
 
-.mainContainer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5rem;
-  min-height: 100vh;
-}
-
-h1 {
+.h1 {
   position: relative;
   color: var(--var--dark--brown);
   font-size: 5em;
@@ -45,7 +41,7 @@ h1 {
   text-shadow: 2px 2px 4px #000000;
 }
 
-h1:before {
+.h1:before {
   content: attr(datatext);
   position: absolute;
   overflow: hidden;
@@ -98,6 +94,7 @@ h1:before {
   display: flex;
   width: 20rem;
   gap: 1rem;
+  margin: 2rem 0;
 }
 
 .description {
