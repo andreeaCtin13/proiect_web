@@ -8,6 +8,7 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Tag } from "primereact/tag";
+import Modal from "../../components/General/Modal";
 
 
 function CurrentStatusPage() {
