@@ -8,8 +8,9 @@ function LoginPage() {
 
     const [userInfo, setUserInfo] = useState({})
     const onChange =(e, name)=>{
-        setUserInfo({...userInfo, [name.toLowerCase()]:e.target.value})
+        setUserInfo({...userInfo, [name]:e.target.value})
     }
+    console.log(userInfo)
     const fields=[
         {
             inputType: "text",

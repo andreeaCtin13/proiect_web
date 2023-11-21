@@ -7,37 +7,49 @@ import { Link } from 'react-router-dom'
 function Register() {
   const [userInfo, setUserInfo] = useState({})
   const onChange =(e, name)=>{
-      setUserInfo({...userInfo, [name.toLowerCase()]:e.target.value})
+    setUserInfo({...userInfo, [name]:e.target.value})
   }
+  const onChecked=(e, name)=>{
+    if(e.target.id==="Teacher"){
+      setUserInfo({...userInfo, [name]:"teacher"})
+    }
+    else{
+      setUserInfo({...userInfo, [name]:"student"})
+    }
+  }
+  console.log(userInfo)
   const fields=[
     {
         inputType: "text",
         labelName: "Mail",
+        name:"mail",
         onChangeAction: onChange,
     },
     {
         inputType: "password",
         labelName: "Password",
+        name:"password",
         onChangeAction: onChange,
     },
     {
       inputType: "password",
       labelName:"Confirm Password",
-      onChange: onChange
+      name:"confirmPassword",
+      onChangeAction: onChange
     },
     {
       inputType:"radio",
       labelName:"Teacher",
       name:"userType",
       change:true,
-      onChange:onChange
+      onChangeAction:onChecked
     },
     {
       inputType:"radio",
       labelName:"Student",
       name:"userType",
       change:true,
-      onChange:onChange
+      onChangeAction:onChecked
     }
 ]
   return (
