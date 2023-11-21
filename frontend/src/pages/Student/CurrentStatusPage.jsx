@@ -146,12 +146,9 @@ function CurrentStatusPage() {
   return (
     <div className={style.mainContainer}>
       <h1>Your current status</h1>
-      {/* <div className={style.loadingSection}>
-        <LoadingAnimation></LoadingAnimation>
         <h2 className={style.h2}>
           Don't give up, a teacher is going to accept your request soon
         </h2>
-      </div> */}
       <div className={style.tableContain}>
         <DataTable
           value={customers}
