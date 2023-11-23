@@ -11,6 +11,7 @@ import { Tag } from "primereact/tag";
 import Modal from "../../components/General/Modal";
 function Phase1() {
     const [customers, setCustomers] = useState(null);
+    const [selectedRow, setSelectedRow] = useState(null); // Add this line
 
 
     useEffect(()=>{
@@ -124,6 +125,7 @@ function Phase1() {
     const renderHeader = () => {
       const value = filters["global"] ? filters["global"].value : "";
   
+
       return (
         <span>
           <i  />
@@ -138,6 +140,17 @@ function Phase1() {
     };
   
     const header = renderHeader();
+    const [showModal, setShowModal] = useState(false);
+
+    const onRowSelect = (event) => {
+      setSelectedRow(event.data);
+      setShowModal(true);
+    };
+  
+    const onHide = () => {
+      setShowModal(false);
+    };
+  
   return (
     <div>
        <h2 className={style.h2}>
@@ -148,11 +161,14 @@ function Phase1() {
           value={customers}
           paginator
           rows={5}
+        onRowSelect={onRowSelect}
           header={header}
           filters={filters}
           onFilter={(e) => setFilters(e.filters)}
           selection={selectedCustomer}
-          onSelectionChange={(e) => setSelectedCustomer(e.value)}
+          onSelectionChange={(e) =>{ 
+            setSelectedCustomer(e.value)
+          }}
           selectionMode="single"
           dataKey="id"
           stateStorage="session"
@@ -180,7 +196,13 @@ function Phase1() {
             style={{ width: "25%" }}
           ></Column>
         </DataTable>
-      </div>
+
+        <Modal
+        visible={showModal}
+        onHide={onHide}
+        header={selectedRow ? selectedRow.name : ""}
+        content={<p>ceva text evdem cand facem legatura cu backend ul</p>} 
+      />      </div>
     </div>
   )
 }

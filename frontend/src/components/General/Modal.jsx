@@ -1,19 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
         
-function Modal({buttonText,  content, header}) {
-    const [visible, setVisible] = useState(false);
-
+function Modal({ header, content, visible, onHide }) {
   return (
     <div className="card flex justify-content-center">
-            <Button label={buttonText} onClick={() => setVisible(true)} />
-            <Dialog header={header} visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
-                {content}
-            </Dialog>
+      <Dialog
+        header={header}
+        visible={visible}
+        style={{ width: '50vw' }}
+        onHide={onHide}
+      >
+        {content}
+      </Dialog>
     </div>
-
-  )
+  );
 }
 
 export default Modal

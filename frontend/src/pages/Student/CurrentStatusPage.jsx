@@ -8,9 +8,9 @@ import Phase4 from "../../components/Student/Phase4";
 
 
 function CurrentStatusPage() {
-  const profesor = "Toma Cristian";
+  const profesor = null;
   const statusList = ["pending", "accepted","loading", "final", "refused"]
-  const status = statusList[3]
+  const status = statusList[0]
   return (
     <div className={style.mainContainer}>
       <h1 className={style.h1}>Your current status</h1>
