@@ -4,12 +4,12 @@ const mysql = require("mysql2/promise.js");
 const env = require("dotenv");
 const usersModel = require("./users");
 const requestsModel = require("./requests");
-
+const sessionsModel = require("./sessions");
 env.config();
 
 const users = usersModel(connection, Sequelize);
 const requests = requestsModel(connection, Sequelize);
-
+const sessions = sessionsModel(connection, Sequelize);
 function Create_DB() {
   let conn;
 
@@ -34,16 +34,22 @@ function Create_DB() {
 
 function FK_Config() {
   users.hasMany(requests, {
-    as: "reqstudents",
+    as: "req_students",
     foreignKey: "id_request",
   });
   requests.belongsTo(users, { foreignKey: "id_student" });
 
   users.hasMany(requests, {
-    as: "reqteachers",
+    as: "req_teachers",
     foreignKey: "id_request",
   });
   requests.belongsTo(users, { foreignKey: "id_profesor" });
+
+  users.hasMany(sessions, {
+    as: "sessions",
+    foreignKey: "idSession",
+  });
+  sessions.belongsTo(users, { foreignKey: "idUser" });
 }
 
 function DB_Init() {
@@ -54,6 +60,7 @@ function DB_Init() {
 module.exports = {
   users,
   requests,
+  sessions,
   connection,
   DB_Init,
 };
