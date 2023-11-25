@@ -10,7 +10,6 @@ function LoginPage() {
     const onChange =(e, name)=>{
         setUserInfo({...userInfo, [name]:e.target.value})
     }
-    console.log(userInfo)
     const fields=[
         {
             inputType: "text",
