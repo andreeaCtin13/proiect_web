@@ -8,11 +8,12 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         allowNull: false,
       },
-      date_of_signature: {
+      date_semnatura_definitiva: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: null,
       },
-      subject: {
+      tematica: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -22,17 +23,19 @@ module.exports = (sequelize, DataTypes) => {
       },
       status: {
         type: DataTypes.ENUM,
-        values: ["sent", "accepted", "rejected", "final"],
-        defaultValue: "sent",
+        values: ["pending", "accepted", "loading", "rejected", "final"],
+        defaultValue: "pending",
         allowNull: false,
       },
       pdf: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue: null,
       },
       feedback: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue: null,
       },
     },
     {

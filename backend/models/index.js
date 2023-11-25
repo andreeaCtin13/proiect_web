@@ -2,14 +2,12 @@ const Sequelize = require("sequelize");
 const connection = require("../config/db");
 const mysql = require("mysql2/promise.js");
 const env = require("dotenv");
-const studentsModel = require("./students");
-const teachersModel = require("./teachers");
+const usersModel = require("./users");
 const requestsModel = require("./requests");
 
 env.config();
 
-const students = studentsModel(connection, Sequelize);
-const teachers = teachersModel(connection, Sequelize);
+const users = usersModel(connection, Sequelize);
 const requests = requestsModel(connection, Sequelize);
 
 function Create_DB() {
@@ -35,19 +33,17 @@ function Create_DB() {
 }
 
 function FK_Config() {
-  teachers.belongsToMany(students, {
-    through: "requests",
-    as: "request-students",
-    foreignKey: "id_student",
+  users.hasMany(requests, {
+    as: "requestsStudents",
+    foreignKey: "id_request",
   });
-  students.belongsToMany(teachers, {
-    through: "requests",
-    as: "request-teachers",
-    foreignKey: "id_teacher",
-  });
+  requests.belongsTo(users, { foreignKey: "id_student" });
 
-  teachers.hasMany(students, { as: "students", foreignKey: "id_student" });
-  students.belongsTo(teachers, { foreignKey: "id_teacher" });
+  users.hasMany(requests, {
+    as: "requestsTeachers",
+    foreignKey: "id_request",
+  });
+  requests.belongsTo(users, { foreignKey: "id_profesor" });
 }
 
 function DB_Init() {
@@ -56,8 +52,8 @@ function DB_Init() {
 }
 
 module.exports = {
-  students,
-  teachers,
+  users,
+  requests,
   connection,
   DB_Init,
 };
