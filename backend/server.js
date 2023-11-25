@@ -3,8 +3,21 @@ const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 8006;
 const router = require("./routes");
-
+const cors = require("cors");
 app.use(express.json());
+const auth = require("./middlewares/index").auth;
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
+app.get("/jwt-secret", auth, (req, res) => {
+  res.status(200).send({ message: "ESTI AUTORIZAT" });
+});
 
 app.use("/", router);
 

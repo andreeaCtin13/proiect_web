@@ -34,13 +34,13 @@ function Create_DB() {
 
 function FK_Config() {
   users.hasMany(requests, {
-    as: "requestsStudents",
+    as: "reqstudents",
     foreignKey: "id_request",
   });
   requests.belongsTo(users, { foreignKey: "id_student" });
 
   users.hasMany(requests, {
-    as: "requestsTeachers",
+    as: "reqteachers",
     foreignKey: "id_request",
   });
   requests.belongsTo(users, { foreignKey: "id_profesor" });
