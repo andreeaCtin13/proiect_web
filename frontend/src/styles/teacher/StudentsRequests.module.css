@@ -1,0 +1,40 @@
+.mainContainer {
+  padding: 2rem;
+}
+
+.contentModal {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.btnAccept {
+  background-color: var(--var--dark--lighter-green);
+  color: var(--var--white);
+  transition: 0.5s;
+}
+
+.btnDecline {
+  background-color: var(--var--dark--brown);
+  color: var(--var--white);
+  transition: 0.5s;
+}
+
+.sendItButton {
+  background-color: var(--var--stawberry--purple);
+  color: var(--var--white);
+  transition: 0.5s;
+}
+
+.sendItButton:hover,
+.btnDecline:hover,
+.btnAccept:hover {
+  cursor: pointer;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.feedbackInput {
+  border-radius: 1rem;
+  padding: 0.5rem;
+  width: 20rem;
+}

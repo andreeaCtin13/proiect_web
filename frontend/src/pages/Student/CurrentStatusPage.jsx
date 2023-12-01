@@ -10,11 +10,11 @@ import Phase4 from "../../components/Student/Phase4";
 function CurrentStatusPage() {
   const profesor = null;
   const statusList = ["pending", "accepted","loading", "final", "refused"]
-  const status = statusList[0]
+  const status = statusList[3]
   return (
     <div className={style.mainContainer}>
       <h1 className={style.h1}>Your current status</h1>
-      {profesor==null?<Phase1></Phase1>:(status=="accepted"?<Phase2></Phase2>:(status=="loading"? <Phase3></Phase3>:<Phase4></Phase4>))}
+      {profesor==null?<Phase1></Phase1>:(status==="accepted"?<Phase2></Phase2>:(status==="loading"? <Phase3></Phase3>:<Phase4></Phase4>))}
     </div>
   );
 }
