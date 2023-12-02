@@ -1,5 +1,7 @@
 .mainContainer {
   padding: 2rem;
+  background-color: var(--var--light--skin--colour);
+  min-height: 100vh;
 }
 
 .contentModal {
