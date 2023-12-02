@@ -7,6 +7,7 @@ import { InputText } from "primereact/inputtext";
 import Modal from "../../components/General/Modal";
 import style from "../../styles/teacher/StudentsRequests.module.css"
 import Button from '../../components/General/Button';
+import { Link } from 'react-router-dom';
 function StudentsRequests() {
   const [customers, setCustomers] = useState(null);
   const [declined, setDiclined] = useState(false)
@@ -96,9 +97,15 @@ function StudentsRequests() {
         <h4>No. available: {no_of_students} </h4>
       </div>
       <div className={style.buttonZone}>
-        <Button content={"Your sessions"} className={`${style.btnAction} ${style.btn}`}></Button>
-        <Button content={"Your students"} className={`${style.btnAction} ${style.btn}`}></Button>
-        <Button content={"Logout"} className={`${style.btnLogout} ${style.btn}`}></Button>
+        <Link className={style.link} to={"/teacher/sessions"}>
+          <Button content={"Your sessions"} className={`${style.btnAction} ${style.btn}`}></Button>
+        </Link>
+        <Link className={style.link} to={"/teacher/accepted-students"}>
+          <Button content={"Your students"} className={`${style.btnAction} ${style.btn}`}></Button>
+        </Link>
+        <Link className={style.link} to={"/"}>
+          <Button content={"Logout"} className={`${style.btnLogout} ${style.btn}`}></Button>
+        </Link>
       </div>
           <div className={style.tableContain}>
             <DataTable

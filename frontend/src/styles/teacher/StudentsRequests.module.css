@@ -64,3 +64,7 @@
 .btnLogout {
   background-color: var(--var--dark--lighter-green);
 }
+
+.link {
+  text-decoration: none;
+}

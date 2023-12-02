@@ -26,12 +26,11 @@ function LoginPage() {
             onChangeAction: onChange,
         },
     ]
-    
   console.log(userInfo)
+  const userStatus = "student"
   return (
     <div className={style.mainContainer}>
       <img src={BackgroundImage} alt="imagine-background" className={style.backgroundImage} />
-
       <div className={style.form}>
         <h2>Login to your account</h2>
         <Form inputs = {fields}></Form>
@@ -39,7 +38,9 @@ function LoginPage() {
             <Link to="/register" className={style.link}>
                 <Button content={"Create Account"} className={style.btnRegister} ></Button>
             </Link>
-            <Button content={"Login"} className={style.btnLogin}></Button>
+            <Link className={style.link} to={userStatus==="teacher"?"/teacher/students-requests":"/user/teachers"}>
+              <Button content={"Login"} className={style.btnLogin}></Button>
+            </Link>
         </div>
       </div>
     </div>

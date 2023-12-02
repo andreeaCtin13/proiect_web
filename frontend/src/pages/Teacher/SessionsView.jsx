@@ -21,15 +21,16 @@ function SessionsView() {
   }
   return (
     <div className={style.mainContainer}>
-      <Link className={style.backButton}>
+      <Link className={style.backButton} to={"/teacher/students-requests"}>
         <div >&lt;</div>
       </Link>
       <h1 className={style.title}>Hi, {user.nume}!! Here are your sessions:</h1>
       <div className={style.containerSessions}>
-        <div>Session 1 ( {sessions[0].dataInceput} - {sessions[0].dataFinal} )</div>
-        <div>Session 2 ( {sessions[1].dataInceput} - {sessions[1].dataFinal} )</div>
-        <div>Session 3 ( {sessions[2].dataInceput} - {sessions[2].dataFinal} )</div>
-
+        {
+          sessions.map((x, index)=>{
+            return <div>Session {index+1} ( {x.dataInceput} - {x.dataFinal} )</div>
+          })
+        }
       </div>
     </div>
   )
