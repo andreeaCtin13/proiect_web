@@ -6,9 +6,12 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import style from "../../styles/teacher/AcceptedStudents.module.css";
 import { Link } from "react-router-dom";
+import Modal from "../../components/General/Modal";
+import Button from "../../components/General/Button";
 function AcceptedStudents() {
   const [customers, setCustomers] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null); 
 
   useEffect(() => {
     setCustomers([
@@ -17,18 +20,21 @@ function AcceptedStudents() {
         name: "Andreea Constantin",
         mail:"andreea@gmail.com",
         titlu_disertatie: "hahahah",
+        stare_cerere:"accepted"
       },
       {
         id: 2000,
         name: "Elena Caravan",
         mail:"elena@gmail.com",
         titlu_disertatie: "hahahah2",
+        stare_cerere:"final"
       },
       {
         id: 88,
         name: "Valeriu Carasel",
         mail:"valeriu@gmail.com",
         titlu_disertatie: "hahahah3",
+        stare_cerere:"accepted"
       },
     ]);
   }, []);
@@ -74,6 +80,18 @@ function AcceptedStudents() {
   };
 
   const header = renderHeader();
+  const [showModal, setShowModal] = useState(false);
+
+  const onRowSelect = (event) => {
+    if(event.data.stare_cerere == "accepted"){
+      setSelectedRow(event.data);
+      setShowModal(true);
+    }
+  };
+
+  const onHide = () => {
+    setShowModal(false);
+  };
 
 
   return (
@@ -89,6 +107,7 @@ function AcceptedStudents() {
           rows={5}
           header={header}
           filters={filters}
+          onRowSelect={onRowSelect}
           onFilter={(e) => setFilters(e.filters)}
           selection={selectedCustomer}
           onSelectionChange={(e) => {
@@ -125,6 +144,22 @@ function AcceptedStudents() {
 
         
       </div>{" "}
+      <Modal
+            visible={showModal}
+            onHide={onHide}
+            header={selectedRow ? selectedRow.name  : ""}
+            content={<div className={style.modalContainer}>
+              <div>
+                <Button content={"Download file"} className={style.btnDownload}></Button>
+
+              </div>
+              <div>
+                Upload the file signed
+                <br />
+                <input type="file" name="file"/>
+              </div>
+              
+            </div>}/>
     </div>
   );
 }

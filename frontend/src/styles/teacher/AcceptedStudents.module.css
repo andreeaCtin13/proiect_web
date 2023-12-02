@@ -21,7 +21,20 @@
   transition: 0.3s;
 }
 
-.backButton:hover {
+.backButton:hover,
+.btnDownload:hover {
   transition: 0.3s;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.btnDownload {
+  background-color: var(--var--dark--green);
+  color: var(--var--white);
+  transition: 0.3s;
 }
