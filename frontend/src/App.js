@@ -66,7 +66,7 @@ const router = createBrowserRouter([
         element: <SelectSessionsPage></SelectSessionsPage>,
       },
       {
-        path: "/teacher/select-sessions",
+        path: "/teacher/sessions",
         element: <SessionsView></SessionsView>,
       },
       {
