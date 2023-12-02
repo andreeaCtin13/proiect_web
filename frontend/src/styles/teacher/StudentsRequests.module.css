@@ -30,7 +30,10 @@
 
 .sendItButton:hover,
 .btnDecline:hover,
-.btnAccept:hover {
+.btnAccept:hover,
+.btnAction:hover,
+.btnLogout:hover {
+  transition: 0.3s;
   cursor: pointer;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -39,4 +42,25 @@
   border-radius: 1rem;
   padding: 0.5rem;
   width: 20rem;
+}
+
+.buttonZone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin: 1rem;
+}
+
+.btn {
+  color: var(--var--white);
+  transition: 0.3s;
+}
+
+.btnAction {
+  background-color: var(--var--stawberry--purple);
+}
+
+.btnLogout {
+  background-color: var(--var--dark--lighter-green);
 }

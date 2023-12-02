@@ -95,6 +95,11 @@ function StudentsRequests() {
       <div>
         <h4>No. available: {no_of_students} </h4>
       </div>
+      <div className={style.buttonZone}>
+        <Button content={"Your sessions"} className={`${style.btnAction} ${style.btn}`}></Button>
+        <Button content={"Your students"} className={`${style.btnAction} ${style.btn}`}></Button>
+        <Button content={"Logout"} className={`${style.btnLogout} ${style.btn}`}></Button>
+      </div>
           <div className={style.tableContain}>
             <DataTable
               value={customers}
