@@ -33,22 +33,8 @@ function Create_DB() {
 }
 
 function FK_Config() {
-  users.hasMany(requests, {
-    as: "req_students",
-    foreignKey: "id_request",
-  });
   requests.belongsTo(users, { foreignKey: "id_student" });
-
-  users.hasMany(requests, {
-    as: "req_teachers",
-    foreignKey: "id_request",
-  });
   requests.belongsTo(users, { foreignKey: "id_profesor" });
-
-  users.hasMany(sessions, {
-    as: "sessions",
-    foreignKey: "idSession",
-  });
   sessions.belongsTo(users, { foreignKey: "idUser" });
 }
 

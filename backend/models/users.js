@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     isProfesor: {
       type: DataTypes.BOOLEAN,
-      allowNull: true,
+      allowNull: false,
       defaultValue: false,
     },
     nume: {
