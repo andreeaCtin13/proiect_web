@@ -23,7 +23,9 @@ function CustomSidebar() {
       >
         <div className={style.content}>
           reufher
-        {/* <Link ></Link> */}
+        <Link >Status</Link>
+        <Link>Search for a teacher</Link>
+        <Link>Logout</Link>
         </div>
       </Sidebar>
 
