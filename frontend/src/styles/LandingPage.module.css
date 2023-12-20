@@ -1,0 +1,102 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&family=Edu+TAS+Beginner&family=Montserrat:wght@100&family=Raleway:ital,wght@0,300;0,500;1,400&display=swap");
+.mainContainer {
+  margin: 0 auto;
+  padding: 0;
+  background: var(--var--light--skin--colour);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.intro {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+  gap: 2rem;
+  margin: 0;
+  justify-content: center;
+  color: var(--var--dark--brown);
+  font-size: 2rem;
+}
+
+.mainIntroSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.logo {
+  width: 5rem;
+  height: 5rem;
+}
+
+.h1 {
+  position: relative;
+  color: var(--var--dark--brown);
+  font-size: 5em;
+  font-family: "Dancing Script", cursive;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.h1:before {
+  content: attr(datatext);
+  position: absolute;
+  overflow: hidden;
+  max-width: 10em;
+  white-space: nowrap;
+  color: var(--var--stawberry--purple);
+  word-spacing: 0.1rem;
+  animation: loading 8s linear;
+}
+
+@keyframes loading {
+  0% {
+    max-width: 0;
+  }
+}
+
+.link {
+  text-decoration: none;
+}
+
+.btnType1 {
+  border: 2px solid var(--var--stawberry--purple);
+  color: var(--var--stawberry--purple);
+  transition: 0.5s;
+}
+
+.btnType2 {
+  border: 2px solid var(--var--dark--lighter-green);
+  color: var(--var--dark--lighter-green);
+  transition: 0.5s;
+}
+
+.btnType1:hover {
+  background-color: var(--var--stawberry--purple);
+  color: var(--var--light--skin--colour);
+  cursor: pointer;
+  transition: 0.5s;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btnType2:hover {
+  background-color: var(--var--dark--lighter-green);
+  color: var(--var--light--skin--colour);
+  cursor: pointer;
+  transition: 0.5s;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.buttonsZone {
+  display: flex;
+  width: 20rem;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.description {
+  width: 30rem;
+}

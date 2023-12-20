@@ -1,0 +1,32 @@
+.mainContainer {
+  padding: 2rem;
+  background-color: var(--var--light--skin--colour);
+  min-height: 100vh;
+}
+
+.inputRequest {
+  width: 30rem;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 1rem;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnSendRequest {
+  margin: 1rem;
+  background-color: var(--var--stawberry--purple);
+  color: var(--var--white);
+  transition: 0.3s;
+}
+
+.btnSendRequest:hover {
+  transition: 0.3s;
+  cursor: pointer;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

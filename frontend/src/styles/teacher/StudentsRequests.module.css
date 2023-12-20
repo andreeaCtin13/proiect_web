@@ -1,0 +1,101 @@
+.mainContainer {
+  padding: 2rem;
+  background-color: var(--var--light--skin--colour);
+  min-height: 100vh;
+}
+
+.contentModal {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.btnAccept {
+  background-color: var(--var--dark--lighter-green);
+  color: var(--var--white);
+  transition: 0.5s;
+}
+
+.btnDecline {
+  background-color: var(--var--dark--brown);
+  color: var(--var--white);
+  transition: 0.5s;
+}
+
+.sendItButton {
+  background-color: var(--var--stawberry--purple);
+  color: var(--var--white);
+  transition: 0.5s;
+}
+
+.sendItButton:hover,
+.btnDecline:hover,
+.btnAccept:hover,
+.btnAction:hover,
+.btnLogout:hover {
+  transition: 0.3s;
+  cursor: pointer;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.feedbackInput {
+  border-radius: 1rem;
+  padding: 0.5rem;
+  width: 20rem;
+}
+
+.buttonZone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin: 1rem;
+}
+
+.btn {
+  color: var(--var--white);
+  transition: 0.3s;
+}
+
+.btnAction {
+  background-color: var(--var--stawberry--purple);
+}
+
+.btnLogout {
+  background-color: var(--var--dark--lighter-green);
+  color: var(--var--light--skin--colour);
+}
+
+.link {
+  text-decoration: none;
+}
+
+.btnZone {
+  margin: 2rem;
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+}
+
+.btnLogoutYes {
+  background-color: var(--var--dark--lighter-green);
+  color: var(--var--white);
+}
+
+.btnLogoutNo {
+  border: 3px solid var(--var--dark--lighter-green);
+  color: var(--var--dark--lighter-green);
+  background-color: transparent;
+}
+
+.btnLogoutYes,
+.btnLogoutNo {
+  cursor: pointer;
+}
+
+.btnLogout:hover,
+.link:hover {
+  transition: 0.5s;
+  color: var(--var--white);
+  cursor: pointer;
+}

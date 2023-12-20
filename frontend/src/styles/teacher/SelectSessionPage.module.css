@@ -1,0 +1,34 @@
+.mainContainer {
+  padding: 6rem 5rem 5rem 5rem;
+  display: flex;
+  background-color: var(--var--ciocolatte);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.h1 {
+  color: var(--var--dark--lighter-green);
+  font-family: "Dancing Script", cursive;
+  font-size: 3rem;
+}
+
+.btnCompete {
+  width: 20rem;
+  background-color: var(--var--dark--lighter-green);
+  color: var(--var--white);
+  transition: 0.5s;
+}
+
+.btnCompete:hover {
+  cursor: pointer;
+  transition: 0.5s;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.formContainer {
+  background-color: var(--var--light--skin--colour);
+  margin: 1rem 0 2rem 0;
+}

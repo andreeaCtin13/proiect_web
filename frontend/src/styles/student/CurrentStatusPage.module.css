@@ -1,0 +1,60 @@
+.mainContainer {
+  padding: 6rem 5rem 5rem 5rem;
+  display: flex;
+  background-color: var(--var--light--skin--colour);
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.h1 {
+  color: var(--var--dark--lighter-green);
+}
+
+.h2 {
+  font-family: "Dancing Script", cursive;
+  color: var(--var--stawberry--purple);
+  font-size: 3rem;
+}
+
+.loadingSection {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  background-color: var(--var--dark--lighter-green);
+  color: var(--var--light--skin--colour);
+  transition: 0.5s;
+  padding: 2rem;
+  width: 15rem;
+}
+
+.btn:hover {
+  background-color: var(--var--dark--green);
+  cursor: pointer;
+  transition: 0.5s;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.flexPhase4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cheersImage {
+  width: 30rem;
+  height: 15rem;
+}
+
+.containerPhase4 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

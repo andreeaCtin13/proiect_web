@@ -1,0 +1,95 @@
+.menuBtn {
+  background-color: var(--var--dark--lighter-green);
+  color: var(--var--light--skin--colour);
+  padding: 1rem;
+  border-radius: 100%;
+  position: fixed;
+  height: 4rem;
+  width: 4rem;
+  top: 2rem;
+  left: 2rem;
+  border: none;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.menuBtn:hover {
+  cursor: pointer;
+}
+
+.sidebarContainer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--var--dark--lighter-green);
+}
+
+.icon {
+  height: 3rem;
+  width: 3rem;
+}
+
+.logo {
+  width: 15rem;
+  height: 15rem;
+  border-radius: 100%;
+}
+
+.content {
+  background-color: var(--var--dark--lighter-green);
+  color: var(--var--light--skin--colour);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2rem;
+  margin-right: 2rem;
+}
+
+.link {
+  text-decoration: none;
+  color: var(--var--light--skin--colour);
+  font-size: 1.2rem;
+  transition: 0.5s;
+}
+
+.btnZone {
+  margin: 2rem;
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+}
+
+.btnLogoutYes {
+  background-color: var(--var--dark--lighter-green);
+  color: var(--var--white);
+}
+
+.btnLogoutNo {
+  border: 3px solid var(--var--dark--lighter-green);
+  color: var(--var--dark--lighter-green);
+  background-color: transparent;
+}
+
+.btnLogoutYes,
+.btnLogoutNo {
+  cursor: pointer;
+}
+
+.btnLogout {
+  background-color: transparent;
+  text-decoration: none;
+  color: var(--var--light--skin--colour);
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0;
+  transition: 0.5s;
+}
+
+.btnLogout:hover,
+.link:hover {
+  transition: 0.5s;
+  color: var(--var--white);
+  cursor: pointer;
+}

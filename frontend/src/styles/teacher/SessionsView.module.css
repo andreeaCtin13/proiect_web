@@ -1,0 +1,49 @@
+.mainContainer {
+  min-height: 100vh;
+  background-color: var(--var--light--skin--colour);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+  padding: 2rem;
+}
+
+.containerSessions {
+  background-color: var(--var--yellow--green);
+  width: fit-content;
+  padding: 4rem;
+  color: var(--var--white);
+  border: 0.5rem dashed var(--var--dark--green);
+  border-radius: 50%;
+}
+
+.containerSessions div {
+  margin: 1rem 0;
+  font-size: 1.5rem;
+}
+
+.backButton {
+  text-decoration: none;
+  position: fixed;
+  background-color: var(--var--dark--green);
+  color: var(--var--white);
+  padding: 1rem;
+  border-radius: 100%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 2rem;
+  left: 2rem;
+  transition: 0.3s;
+}
+
+.backButton:hover {
+  transition: 0.3s;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
