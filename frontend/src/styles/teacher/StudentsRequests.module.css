@@ -63,8 +63,39 @@
 
 .btnLogout {
   background-color: var(--var--dark--lighter-green);
+  color: var(--var--light--skin--colour);
 }
 
 .link {
   text-decoration: none;
+}
+
+.btnZone {
+  margin: 2rem;
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+}
+
+.btnLogoutYes {
+  background-color: var(--var--dark--lighter-green);
+  color: var(--var--white);
+}
+
+.btnLogoutNo {
+  border: 3px solid var(--var--dark--lighter-green);
+  color: var(--var--dark--lighter-green);
+  background-color: transparent;
+}
+
+.btnLogoutYes,
+.btnLogoutNo {
+  cursor: pointer;
+}
+
+.btnLogout:hover,
+.link:hover {
+  transition: 0.5s;
+  color: var(--var--white);
+  cursor: pointer;
 }

@@ -1,13 +1,6 @@
-import logo from "./logo.svg";
 import "./App.css";
-import Button from "./components/General/Button";
 import LandingPage from "./pages/LandingPage";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Outlet,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import Register from "./pages/Register";
 import CurrentStatusPage from "./pages/Student/CurrentStatusPage";

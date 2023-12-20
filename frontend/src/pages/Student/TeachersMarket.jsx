@@ -7,11 +7,9 @@ import { InputText } from "primereact/inputtext";
 import Modal from "../../components/General/Modal";
 import style from "../../styles/student/TeacherMarket.module.css"
 import Button from '../../components/General/Button';
-import { Link } from 'react-router-dom';
 function TeachersMarket() {
   const [customers, setCustomers] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null); 
-  const no_of_students = 9; //i have to think about it again when we link backend with frontend
 
     useEffect(()=>{
       setCustomers([{

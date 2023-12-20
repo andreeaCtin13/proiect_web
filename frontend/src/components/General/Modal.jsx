@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Button } from 'primereact/button';
+import React from "react";
 import { Dialog } from 'primereact/dialog';
         
 function Modal({ header, content, visible, onHide }) {

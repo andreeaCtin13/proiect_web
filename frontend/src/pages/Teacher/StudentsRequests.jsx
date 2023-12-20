@@ -82,6 +82,12 @@ function StudentsRequests() {
       setSelectedRow(event.data);
       setShowModal(true);
     };
+
+  
+    const showModalFunction = ()=>{
+      setShowModal(true);
+  
+    }
   
     const onHide = () => {
       setShowModal(false);
@@ -103,9 +109,7 @@ function StudentsRequests() {
         <Link className={style.link} to={"/teacher/accepted-students"}>
           <Button content={"Your students"} className={`${style.btnAction} ${style.btn}`}></Button>
         </Link>
-        <Link className={style.link} to={"/"}>
-          <Button content={"Logout"} className={`${style.btnLogout} ${style.btn}`}></Button>
-        </Link>
+        <Button className={style.btnLogout} onClick={showModalFunction} content='Logout'></Button>
       </div>
           <div className={style.tableContain}>
             <DataTable
@@ -161,6 +165,19 @@ function StudentsRequests() {
               }
             </div>}/>      
           </div>
+          <Modal
+            visible={showModal}
+            onHide={onHide}
+            header={"Logout"}
+            content={<div className={style.modalContent}>
+              <div>Are you sure you want to logout?</div>
+              <div className={style.btnZone}>
+              <Link to ="/" className={style.link}>
+                <Button content={"Yes"} className={style.btnLogoutYes}></Button>
+              </Link>
+              <Button content={"No"} className={style.btnLogoutNo} onClick={onHide}></Button>
+              </div>
+            </div>}/>  
     </div>
   )
 }

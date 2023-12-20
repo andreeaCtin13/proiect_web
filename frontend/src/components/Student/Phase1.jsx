@@ -1,5 +1,4 @@
 import React from 'react'
-import LoadingAnimation from "../../components/General/LoadingAnimation";
 import style from "../../styles/student/CurrentStatusPage.module.css";
 import { useState, useEffect } from "react";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
@@ -87,8 +86,9 @@ function Phase1() {
         case "negotiation":
           return "warning";
   
-        case "renewal":
+        default:
           return null;
+
       }
     };
   

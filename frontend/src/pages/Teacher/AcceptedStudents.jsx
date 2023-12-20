@@ -83,7 +83,7 @@ function AcceptedStudents() {
   const [showModal, setShowModal] = useState(false);
 
   const onRowSelect = (event) => {
-    if(event.data.stare_cerere == "accepted"){
+    if(event.data.stare_cerere === "accepted"){
       setSelectedRow(event.data);
       setShowModal(true);
     }
