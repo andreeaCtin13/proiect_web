@@ -20,10 +20,10 @@ const controller = {
           .status(400)
           .send({ message: "Eroare validitate date", position: i });
       }
-      if (newSessions[i].hasOwnProperty("id_profesor_asociat")) {
+      if (newSessions[i].hasOwnProperty("id_prof_asociat")) {
         const user = await usersModel.findOne({
           where: {
-            idUser: newSessions[i].id_profesor_asociat,
+            idUser: newSessions[i].id_prof_asociat,
             isProfesor: true,
           },
         });
@@ -59,9 +59,10 @@ const controller = {
         {
           model: usersModel,
           as: "sessions",
-          where: { id_profesor_asociat: id },
+          where: { idUser: id },
         },
       ],
+      where: { id_prof_asociat: id_profesor_asociat },
     });
     if (!sessionByID) {
       return res
