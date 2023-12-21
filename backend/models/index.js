@@ -35,23 +35,33 @@ function FK_Config() {
   // User model associations
   users.hasMany(requests, {
     foreignKey: "studentId",
-    as: "studentRequests", // Alias for the student relationship
+    as: "studentRequests",
   });
 
   users.hasMany(requests, {
     foreignKey: "teacherId",
-    as: "teacherRequests", // Alias for the teacher relationship
+    as: "teacherRequests",
   });
 
   // Request model associations
   requests.belongsTo(users, {
     foreignKey: "studentId",
-    as: "student", // Alias for the student relationship
+    as: "student",
   });
 
   requests.belongsTo(users, {
     foreignKey: "teacherId",
-    as: "teacher", // Alias for the teacher relationship
+    as: "teacher",
+  });
+
+  users.hasMany(sessions, {
+    foreignKey: "id_profesor_asociat",
+    as: "sessions",
+  });
+
+  sessions.belongsTo(users, {
+    foreignKey: "id_profesor_asociat",
+    as: "sessions",
   });
 }
 
