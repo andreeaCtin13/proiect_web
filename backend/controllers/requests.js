@@ -3,15 +3,9 @@ const usersModel = require("../models").users;
 
 const controller = {
   addRequest: async (req, res) => {
-    const {
-      data_semnatura_definitiva,
-      tematica,
-      status,
-      pdf,
-      feedback,
-      id_student,
-      id_profesor,
-    } = req.body;
+    const { tematica, status, pdf, feedback, id_student, id_profesor } =
+      req.body;
+    const date = new Date();
 
     await usersModel
       .findByPk(id_student)
@@ -35,16 +29,15 @@ const controller = {
                     });
                     return;
                   } else {
-                    // varianta corecta
                     await requestModel
                       .create({
-                        data_semnatura_definitiva,
+                        date_semnatura_definitiva: date,
                         tematica,
                         status,
                         pdf,
                         feedback,
-                        id_student,
-                        id_profesor,
+                        studentId: id_student,
+                        teacherId: id_profesor,
                       })
                       .then((request) => {
                         if (request) {

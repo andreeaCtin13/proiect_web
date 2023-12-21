@@ -4,8 +4,8 @@ require("dotenv").config();
 const port = process.env.PORT || 8006;
 const router = require("./routes");
 const cors = require("cors");
-app.use(express.json());
 const auth = require("./middlewares/index").auth;
+app.use(express.json());
 
 app.use(
   cors({

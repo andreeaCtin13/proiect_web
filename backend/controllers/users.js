@@ -1,4 +1,5 @@
 const usersModel = require("../models").users;
+const requestsModel = require("../models").requests;
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
@@ -7,11 +8,28 @@ const generateAccessToken = (user) => {
   return jwt.sign({ user }, process.env.SECRET_KEY, { expiresIn: "2h" });
 };
 
-const controller = {
-  getAllUsers: (req, res) => {
-    res.status(200).send("totu ok la user");
-  },
+async function getStudentsForTeacher(id_profesor) {
+  try {
+    console.log("id_prof: ", id_profesor);
+    const students = await usersModel.findAll({
+      include: [
+        {
+          model: requestsModel,
+          as: "teacherRequests", // Use the correct alias
+          where: { teacherId: id_profesor },
+        },
+      ],
+      where: { isProfesor: false },
+    });
 
+    return students;
+  } catch (error) {
+    console.error("Error fetching students:", error);
+    throw error;
+  }
+}
+
+const controller = {
   login: async (req, res) => {
     const mail = req.body.mail;
     const password = req.body.password;
@@ -57,6 +75,50 @@ const controller = {
     } catch (e) {
       console.log(e);
     }
+  },
+
+  // Ex QueryParams = http://localhost:9000/api/employeeFilter?employeeName=Ionut&employeeSurName=Alex22&take=3&skip=2
+  getStudentsByRequestStatusWithFilterAndPagination: async (req, res) => {
+    const { id_profesor } = req.params;
+
+    try {
+      const students = await getStudentsForTeacher(id_profesor);
+      // const students = [];
+      // res.json(students);
+      return res.status(201).send({ query: req.query, students: students });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    // const filter = req.params.filter;
+    // if (!filter.take) filter.take = 10;
+
+    // if (!filter.skip) filter.skip = 1;
+
+    // let whereClause = {};
+    // if (filter.employeeName)
+    //   whereClause.EmployeeName = { [LikeOp]: `%${filter.employeeName}%` };
+
+    // if (filter.employeeSurName)
+    //   whereClause.EmployeeSurName = { [LikeOp]: `%${filter.employeeSurName}%` };
+
+    // let whereIncludeClause = {};
+
+    // if (filter.city) whereIncludeClause.City = { [LikeOp]: `%${filter.city}%` };
+
+    // return await Employee.findAndCountAll({
+    //   distinct: true,
+    //   include: [
+    //     {
+    //       model: Adresa,
+    //       as: "Adrese",
+    //       where: whereIncludeClause,
+    //     },
+    //   ],
+    //   where: whereClause,
+    //   limit: parseInt(filter.take),
+    //   offset: parseInt(filter.skip - 1) * parseInt(filter.take), // skip este pagina curenta iar take sunt cate inregistrari vin pe pagina
+    // });
   },
 };
 

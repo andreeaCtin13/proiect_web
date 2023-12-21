@@ -31,11 +31,28 @@ function Create_DB() {
       console.warn(err.stack);
     });
 }
-
 function FK_Config() {
-  requests.belongsTo(users, { foreignKey: "id_student" });
-  requests.belongsTo(users, { foreignKey: "id_profesor" });
-  sessions.belongsTo(users, { foreignKey: "idUser" });
+  // User model associations
+  users.hasMany(requests, {
+    foreignKey: "studentId",
+    as: "studentRequests", // Alias for the student relationship
+  });
+
+  users.hasMany(requests, {
+    foreignKey: "teacherId",
+    as: "teacherRequests", // Alias for the teacher relationship
+  });
+
+  // Request model associations
+  requests.belongsTo(users, {
+    foreignKey: "studentId",
+    as: "student", // Alias for the student relationship
+  });
+
+  requests.belongsTo(users, {
+    foreignKey: "teacherId",
+    as: "teacher", // Alias for the teacher relationship
+  });
 }
 
 function DB_Init() {
