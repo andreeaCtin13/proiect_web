@@ -32,35 +32,33 @@ function Create_DB() {
     });
 }
 function FK_Config() {
-  // User model associations
   users.hasMany(requests, {
-    foreignKey: "studentId",
+    foreignKey: { name: "studentId", allowNull: false },
     as: "studentRequests",
   });
 
   users.hasMany(requests, {
-    foreignKey: "teacherId",
+    foreignKey: { name: "teacherId", allowNull: false },
     as: "teacherRequests",
   });
 
-  // Request model associations
-  requests.belongsTo(users, {
-    foreignKey: "studentId",
-    as: "student",
-  });
+  // requests.belongsTo(users, {
+  //   foreignKey: { name: "studentId", allowNull: false },
+  //   as: "studentRequests",
+  // });
 
-  requests.belongsTo(users, {
-    foreignKey: "teacherId",
-    as: "teacher",
-  });
+  // requests.belongsTo(users, {
+  //   foreignKey: { name: "teacherId", allowNull: false },
+  //   as: "teacherRequests",
+  // });
 
   users.hasMany(sessions, {
-    foreignKey: "id_profesor_asociat",
+    foreignKey: "id_prof_asociat",
     as: "sessions",
   });
 
   sessions.belongsTo(users, {
-    foreignKey: "id_profesor_asociat",
+    foreignKey: { name: "id_prof_asociat", allowNull: false },
     as: "sessions",
   });
 }

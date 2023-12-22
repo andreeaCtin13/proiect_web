@@ -43,6 +43,7 @@ const controller = {
       }
     }
 
+    console.log(newSessions);
     await sessionsModel
       .bulkCreate(newSessions)
       .then(() => {
@@ -54,15 +55,8 @@ const controller = {
   },
   getAllSessionsByID: async (req, res) => {
     const { id } = req.params;
-    const sessionByID = sessionsModel.findAll({
-      include: [
-        {
-          model: usersModel,
-          as: "sessions",
-          where: { idUser: id },
-        },
-      ],
-      where: { id_prof_asociat: id_profesor_asociat },
+    const sessionByID = await sessionsModel.findAll({
+      where: { id_prof_asociat: id },
     });
     if (!sessionByID) {
       return res

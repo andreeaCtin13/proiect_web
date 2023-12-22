@@ -11,18 +11,14 @@ const generateAccessToken = (user) => {
 async function getStudentsForTeacher(id_profesor) {
   try {
     console.log("id_prof: ", id_profesor);
-    const students = await usersModel.findAll({
-      include: [
-        {
-          model: requestsModel,
-          as: "teacherRequests", // Use the correct alias
-          where: { teacherId: id_profesor },
-        },
-      ],
-      where: { isProfesor: false },
+    const requests = await requestsModel.findAll({
+      where: {
+        teacherId: id_profesor,
+      },
+      include: { model: usersModel, as: "studentRequests" },
     });
-
-    return students;
+    console.log(JSON.stringify(requests, null, 2));
+    return requests;
   } catch (error) {
     console.error("Error fetching students:", error);
     throw error;
