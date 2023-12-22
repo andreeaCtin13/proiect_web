@@ -10,4 +10,6 @@ router.get(
   useriController.getStudentsByRequestStatusWithFilterAndPagination
 );
 
+router.put("/updateUser/:id_user", useriController.updateUserIdProfAsociat);
+
 module.exports = router;

@@ -73,6 +73,37 @@ const controller = {
     }
   },
 
+  updateUserIdProfAsociat: async (req, res) => {
+    let newUser = req.body;
+    let { id_user } = req.params;
+    console.log(id_user, newUser);
+    await usersModel
+      .findByPk(id_user)
+      .then(async (user) => {
+        if (!user) {
+          res
+            .status(400)
+            .send({ message: "nu ai introdus un id pentru profesor valid" });
+        }
+      })
+      .catch((err) => {
+        res.status(500).send({ message: "server error", err: err });
+      });
+
+    await usersModel
+      .update(newUser, {
+        where: {
+          idUser: id_user,
+        },
+      })
+      .then(() => {
+        res.status(200).send(newUser);
+      })
+      .catch((err) => {
+        res.status(500), send({ err: err });
+      });
+  },
+
   // Ex QueryParams = http://localhost:9000/api/employeeFilter?employeeName=Ionut&employeeSurName=Alex22&take=3&skip=2
   getStudentsByRequestStatusWithFilterAndPagination: async (req, res) => {
     const { id_profesor } = req.params;
