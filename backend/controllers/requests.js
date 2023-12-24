@@ -1,5 +1,15 @@
 const requestModel = require("../models").requests;
 const usersModel = require("../models").users;
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    return cb(null, "./images");
+  },
+  filename: function (req, file, cb) {
+    return cb(null, `${file.originalname}`);
+  },
+});
 
 const controller = {
   addRequest: async (req, res) => {
@@ -106,6 +116,22 @@ const controller = {
       }
     } catch (err) {
       console.log(err);
+    }
+  },
+  uploadFile: async (req, res) => {
+    console.log(req.body);
+    console.log(req.file);
+    const fileName = storage.fileName;
+    console.log(fileName);
+    //si dupa ce testam asta ulterior legarii cu frontul, putem sa uctualizam fieldul din request cu locatia fisierului
+  },
+  getFilePath: async (req, res) => {
+    const id_request = req.params.id;
+    try {
+      const request = await requestModel.findByPk(Number(id_request));
+      return res.status(200).send({ path: request.pdf });
+    } catch (err) {
+      return res.status(500).send({ message: "Server ERROR", err: err });
     }
   },
 };
