@@ -36,25 +36,23 @@ function FK_Config() {
     foreignKey: { name: "studentId", allowNull: false },
     as: "studentRequests",
   });
-
   users.hasMany(requests, {
     foreignKey: { name: "teacherId", allowNull: false },
     as: "teacherRequests",
   });
 
-  // requests.belongsTo(users, {
-  //   foreignKey: { name: "studentId", allowNull: false },
-  //   as: "studentRequests",
-  // });
-
-  // requests.belongsTo(users, {
-  //   foreignKey: { name: "teacherId", allowNull: false },
-  //   as: "teacherRequests",
-  // });
-
   users.hasMany(sessions, {
     foreignKey: "id_prof_asociat",
     as: "sessions",
+  });
+
+  requests.belongsTo(users, {
+    foreignKey: { name: "studentId", allowNull: false },
+    as: "studentRequests",
+  });
+  requests.belongsTo(users, {
+    foreignKey: { name: "teacherId", allowNull: false },
+    as: "teacherRequests",
   });
 
   sessions.belongsTo(users, {

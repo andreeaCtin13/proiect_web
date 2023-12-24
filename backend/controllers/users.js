@@ -1,24 +1,33 @@
 const usersModel = require("../models").users;
 const requestsModel = require("../models").requests;
+const connection = require("../models").connection;
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+const { Sequelize } = require("sequelize");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const env = require("dotenv");
+env.config();
 const generateAccessToken = (user) => {
   return jwt.sign({ user }, process.env.SECRET_KEY, { expiresIn: "2h" });
 };
 
+const sequelize = new Sequelize(
+  process.env.DB_DATABASE,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
+  {
+    host: "localhost",
+    dialect: "mysql",
+  }
+);
+
 async function getStudentsForTeacher(id_profesor) {
   try {
-    console.log("id_prof: ", id_profesor);
-    const requests = await requestsModel.findAll({
-      where: {
-        teacherId: id_profesor,
-      },
-      include: { model: usersModel, as: "studentRequests" },
-    });
-    console.log(JSON.stringify(requests, null, 2));
-    return requests;
+    const [results, metadata] = await sequelize.query(
+      "SELECT id_request, date_semnatura_definitiva, tematica, status, pdf, feedback, nume FROM requests JOIN users WHERE requests.studentId=users.idUser"
+    );
+
+    return results;
   } catch (error) {
     console.error("Error fetching students:", error);
     throw error;
@@ -109,10 +118,9 @@ const controller = {
     const { id_profesor } = req.params;
 
     try {
-      const students = await getStudentsForTeacher(id_profesor);
-      // const students = [];
-      // res.json(students);
-      return res.status(201).send({ query: req.query, students: students });
+      const requests = await getStudentsForTeacher(id_profesor);
+
+      return res.status(201).send({ query: req.query, requests: requests });
     } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
     }

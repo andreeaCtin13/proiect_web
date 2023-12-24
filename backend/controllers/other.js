@@ -10,10 +10,23 @@ const controller = {
         force: true,
       })
       .then(() => {
-        res.status(200).send({ message: "Baza de date a fost resetata" });
+        connection
+          .sync({ force: true })
+          .then(() => {
+            res.status(200).send({ message: "Baza de date a fost resetata" });
+          })
+          .catch((err) => {
+            console.log(err);
+            return res
+              .status(500)
+              .send({ message: "Eroare la resetarea bazei de date", err: err });
+          });
       })
-      .catch(() => {
-        res.status(500).send({ message: "Eroare la resetarea bazei de date" });
+      .catch((err) => {
+        console.log(err);
+        return res
+          .status(500)
+          .send({ message: "Eroare la resetarea bazei de date" });
       });
   },
 };
