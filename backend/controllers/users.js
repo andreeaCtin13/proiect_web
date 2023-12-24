@@ -6,6 +6,8 @@ const saltRounds = 10;
 const { Sequelize } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const env = require("dotenv");
+const { LikeOp, EqOp } = require("./operators");
+
 env.config();
 const generateAccessToken = (user) => {
   return jwt.sign({ user }, process.env.SECRET_KEY, { expiresIn: "2h" });
@@ -23,11 +25,10 @@ const sequelize = new Sequelize(
 
 async function getStudentsForTeacher(id_profesor) {
   try {
-    const [results, metadata] = await sequelize.query(
-      "SELECT id_request, date_semnatura_definitiva, tematica, status, pdf, feedback, nume FROM requests JOIN users WHERE requests.studentId=users.idUser"
-    );
-
-    return results;
+    // const [results, metadata] = await sequelize.query(
+    //   "SELECT id_request, date_semnatura_definitiva, tematica, status, pdf, feedback, nume FROM requests JOIN users WHERE requests.studentId=users.idUser"
+    // );
+    // return results;
   } catch (error) {
     console.error("Error fetching students:", error);
     throw error;
@@ -116,44 +117,43 @@ const controller = {
   // Ex QueryParams = http://localhost:9000/api/employeeFilter?employeeName=Ionut&employeeSurName=Alex22&take=3&skip=2
   getStudentsByRequestStatusWithFilterAndPagination: async (req, res) => {
     const { id_profesor } = req.params;
+    const filter = req.query;
+    if (!filter.take) filter.take = 10;
 
-    try {
-      const requests = await getStudentsForTeacher(id_profesor);
+    if (!filter.skip) filter.skip = 1;
 
-      return res.status(201).send({ query: req.query, requests: requests });
-    } catch (error) {
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+    let whereClause = {};
+    let whereIncludeClause = {};
+    if (filter.status) whereClause.status = { [EqOp]: filter.status };
+    if (filter.nume) whereIncludeClause.nume = { [LikeOp]: `%${filter.nume}` };
+    // try {
+    //   const requests = await getStudentsForTeacher(id_profesor);
 
-    // const filter = req.params.filter;
-    // if (!filter.take) filter.take = 10;
+    //   return res.status(201).send({ query: filter, requests: requests });
+    // } catch (error) {
+    //   res.status(500).json({ error: "Internal Server Error" });
+    // }
 
-    // if (!filter.skip) filter.skip = 1;
-
-    // let whereClause = {};
-    // if (filter.employeeName)
-    //   whereClause.EmployeeName = { [LikeOp]: `%${filter.employeeName}%` };
-
-    // if (filter.employeeSurName)
-    //   whereClause.EmployeeSurName = { [LikeOp]: `%${filter.employeeSurName}%` };
-
-    // let whereIncludeClause = {};
-
-    // if (filter.city) whereIncludeClause.City = { [LikeOp]: `%${filter.city}%` };
-
-    // return await Employee.findAndCountAll({
-    //   distinct: true,
-    //   include: [
-    //     {
-    //       model: Adresa,
-    //       as: "Adrese",
-    //       where: whereIncludeClause,
-    //     },
-    //   ],
-    //   where: whereClause,
-    //   limit: parseInt(filter.take),
-    //   offset: parseInt(filter.skip - 1) * parseInt(filter.take), // skip este pagina curenta iar take sunt cate inregistrari vin pe pagina
-    // });
+    await requestsModel
+      .findAndCountAll({
+        include: [
+          {
+            model: usersModel,
+            as: "studentRequests",
+            where: whereIncludeClause,
+          },
+        ],
+        where: { ...whereClause, teacherId: id_profesor },
+        limit: parseInt(filter.take),
+        offset: parseInt(filter.skip - 1) * parseInt(filter.take),
+      })
+      .then((rezultat) => {
+        return res.status(200).send({ requests: rezultat });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send({ message: "server error", err: err });
+      });
   },
 };
 

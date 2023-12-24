@@ -6,6 +6,7 @@ const MatchOp = sequelize.Op.match;
 const IsOp = sequelize.Op.is;
 const RegexOp = sequelize.Op.regexp;
 const OrOp = sequelize.Op.or;
+const EqOp = sequelize.Op.eq;
 
 module.exports = {
   LikeOp,
@@ -14,4 +15,5 @@ module.exports = {
   IsOp,
   RegexOp,
   OrOp,
+  EqOp,
 };
