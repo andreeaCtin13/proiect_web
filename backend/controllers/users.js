@@ -155,6 +155,29 @@ const controller = {
         return res.status(500).send({ message: "server error", err: err });
       });
   },
+  getAllTeachersWithFilterAndPagination: async (req, res) => {
+    const filter = req.query;
+    if (!filter.take) filter.take = 10;
+
+    if (!filter.skip) filter.skip = 1;
+
+    let whereClause = {};
+    if (filter.nume) whereClause.nume = { [LikeOp]: `%${filter.nume}%` };
+
+    await usersModel
+      .findAndCountAll({
+        where: { ...whereClause, isProfesor: true },
+        limit: parseInt(filter.take),
+        offset: parseInt(filter.skip - 1) * parseInt(filter.take),
+      })
+      .then((rezultat) => {
+        return res.status(200).send({ requests: rezultat });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send({ message: "server error", err: err });
+      });
+  },
 };
 
 module.exports = controller;

@@ -11,5 +11,9 @@ router.get(
 );
 
 router.put("/updateUser/:id_user", useriController.updateUserIdProfAsociat);
+router.get(
+  "/getAllTeachers/teachers_query",
+  useriController.getAllTeachersWithFilterAndPagination
+);
 
 module.exports = router;
