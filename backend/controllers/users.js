@@ -114,7 +114,6 @@ const controller = {
       });
   },
 
-  // Ex QueryParams = http://localhost:9000/api/employeeFilter?employeeName=Ionut&employeeSurName=Alex22&take=3&skip=2
   getStudentsByRequestStatusWithFilterAndPagination: async (req, res) => {
     const { id_profesor } = req.params;
     const filter = req.query;
@@ -160,6 +159,39 @@ const controller = {
     await usersModel
       .findAndCountAll({
         where: { ...whereClause, isProfesor: true },
+        limit: parseInt(filter.take),
+        offset: parseInt(filter.skip - 1) * parseInt(filter.take),
+      })
+      .then((rezultat) => {
+        return res.status(200).send({ requests: rezultat });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send({ message: "server error", err: err });
+      });
+  },
+  getTechersRequestsStatusWithFilterAndPagination: async (req, res) => {
+    const { id_student } = req.params;
+    const filter = req.query;
+    if (!filter.take) filter.take = 10;
+
+    if (!filter.skip) filter.skip = 1;
+
+    let whereClause = {};
+    let whereIncludeClause = {};
+    if (filter.status) whereClause.status = { [EqOp]: filter.status };
+    if (filter.nume) whereIncludeClause.nume = { [LikeOp]: `%${filter.nume}` };
+
+    await requestsModel
+      .findAndCountAll({
+        include: [
+          {
+            model: usersModel,
+            as: "studentRequests",
+            where: whereIncludeClause,
+          },
+        ],
+        where: { ...whereClause, studentId: id_student },
         limit: parseInt(filter.take),
         offset: parseInt(filter.skip - 1) * parseInt(filter.take),
       })

@@ -15,5 +15,9 @@ router.get(
   "/getAllTeachers/teachers_query",
   useriController.getAllTeachersWithFilterAndPagination
 );
+router.get(
+  "/getAllTeachersRequests/:id_student/teacher_query",
+  useriController.getTechersRequestsStatusWithFilterAndPagination
+);
 
 module.exports = router;
