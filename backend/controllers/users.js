@@ -126,13 +126,6 @@ const controller = {
     let whereIncludeClause = {};
     if (filter.status) whereClause.status = { [EqOp]: filter.status };
     if (filter.nume) whereIncludeClause.nume = { [LikeOp]: `%${filter.nume}` };
-    // try {
-    //   const requests = await getStudentsForTeacher(id_profesor);
-
-    //   return res.status(201).send({ query: filter, requests: requests });
-    // } catch (error) {
-    //   res.status(500).json({ error: "Internal Server Error" });
-    // }
 
     await requestsModel
       .findAndCountAll({

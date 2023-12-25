@@ -48,7 +48,6 @@ function FK_Config() {
 
   requests.belongsTo(users, {
     as: "studentRequests",
-
     foreignKey: "studentId",
   });
   requests.belongsTo(users, {
