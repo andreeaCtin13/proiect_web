@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "type": "msedge",
+      "name": "http://localhost:9000/users/getAllStudentsRequest/2/student_query?status=pending",
+      "request": "launch",
+      "url": "http://localhost:9000/users/getAllStudentsRequest/2/student_query?status=pending"
+    }
+  ]
+}
