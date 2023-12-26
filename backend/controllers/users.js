@@ -37,9 +37,9 @@ async function getStudentsForTeacher(id_profesor) {
 
 const controller = {
   login: async (req, res) => {
+    console.log(req.body);
     const mail = req.body.mail;
     const password = req.body.password;
-
     const user = await usersModel.findOne({ where: { mail: mail } });
     if (user) {
       const password_valid = await bcrypt.compare(password, user.password);

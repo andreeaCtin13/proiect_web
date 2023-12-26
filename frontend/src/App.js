@@ -10,6 +10,8 @@ import AcceptedStudents from "./pages/Teacher/AcceptedStudents";
 import SelectSessionsPage from "./pages/Teacher/SelectSessionsPage";
 import SessionsView from "./pages/Teacher/SessionsView";
 import StudentsRequests from "./pages/Teacher/StudentsRequests";
+import { useState } from "react";
+import { UserContext } from "./context/UserContext";
 
 const Layout = () => {
   return (
@@ -19,7 +21,6 @@ const Layout = () => {
     </>
   );
 };
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -71,9 +72,13 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const [gloablUser, setGlobalUser] = useState(false);
+
   return (
     <div className="App">
-      <RouterProvider router={router}></RouterProvider>
+      <UserContext.Provider value={{ gloablUser, setGlobalUser }}>
+        <RouterProvider router={router}></RouterProvider>
+      </UserContext.Provider>
     </div>
   );
 }

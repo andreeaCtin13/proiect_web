@@ -7,37 +7,29 @@ import { InputText } from "primereact/inputtext";
 import Modal from "../../components/General/Modal";
 import style from "../../styles/student/TeacherMarket.module.css"
 import Button from '../../components/General/Button';
+import axios from "axios";
+
 function TeachersMarket() {
   const [customers, setCustomers] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null); 
 
     useEffect(()=>{
-      setCustomers([{
-        id: 1000,
-        name: 'Andreea Constantin',
-        mail:"andreea@gmail.com",
-        no_of_students: 3,
-    },
-    {
-      id: 2000,
-      name: 'Elena Caravan',
-      mail:"andreea@gmail.com",
-      no_of_students: 4,
-  },
-  {
-    id: 88,
-    name: 'Valeriu Carasel',
-    mail:"andreea@gmail.com",
-    no_of_students: 1,
-  },])
+      const teacher_query = "teachers_query?"
+      const skip_value = 1
+      const getAll = async()=>{
+        await axios.get(`http://localhost:9000/users/getAllTeachers/${teacher_query}?&take=10&skip=${skip_value}`).then((response)=>{
+        console.log(response)
+        let teachers= response.data.requests.rows
+     
+        setCustomers(teachers)
+      }).catch(err=>{
+        console.log(err)
+      })}
+      getAll()
     },[])
     const [filters, setFilters] = useState({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      name: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      "country.name": {
+      nume: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
@@ -94,7 +86,7 @@ function TeachersMarket() {
         <DataTable
           value={customers}
           paginator
-          rows={5}
+          rows={8}
           onRowSelect={onRowSelect}
           header={header}
           filters={filters}
@@ -111,7 +103,7 @@ function TeachersMarket() {
           tableStyle={{ minWidth: "50rem" }}
         >
           <Column
-            field="name"
+            field="nume"
             header="Name"
             sortable
             filter
