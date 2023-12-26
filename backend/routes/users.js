@@ -10,7 +10,7 @@ router.get(
   useriController.getStudentsByRequestStatusWithFilterAndPagination
 );
 
-router.put("/updateUser/:id_user", useriController.updateUserIdProfAsociat);
+router.put("/updateUser/:id_user", useriController.updateUserById);
 router.get(
   "/getAllTeachers/teachers_query",
   useriController.getAllTeachersWithFilterAndPagination
@@ -19,5 +19,6 @@ router.get(
   "/getAllTeachersRequests/:id_student/teacher_query",
   useriController.getTechersRequestsStatusWithFilterAndPagination
 );
+router.get("/getUserByID/:id", useriController.getUserByID);
 
 module.exports = router;

@@ -95,24 +95,34 @@ const controller = {
   },
   updateRequest: async (req, res) => {
     const id_request = req.params.id;
-    console.log(id_request);
     const new_request = req.body;
     try {
       const request = requestModel.findByPk(id_request);
-      if (request) {
-        await requestModel
-          .update(new_request, { where: { id_request } })
-          .then((result) => {
-            res.status(200).send(new_request);
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(500).json({ message: "eroare la update request" });
+      const teacher = await usersModel.findByPk(new_request.profesorId);
+      const student = await usersModel.findByPk(new_request.studentId);
+      console.log(student, teacher);
+      if ((teacher != null) & (student != null)) {
+        if (teacher.isProfesor == true && student.isProfesor == false) {
+          if (request) {
+            await requestModel
+              .update(new_request, { where: { id_request } })
+              .then(() => {
+                return res.status(200).send(new_request);
+              })
+              .catch((err) => {
+                console.log(err);
+                res.status(500).json({ message: "eroare la update request" });
+              });
+          }
+        } else {
+          res.status(404).json({
+            message: "id-urile furnizate nu corespund tipului de user aferent",
           });
+        }
       } else {
         res
           .status(404)
-          .json({ message: "nu exista request ul cu id ul respectiv" });
+          .json({ message: "nu exista foreignkey-urile aferente requestului" });
       }
     } catch (err) {
       console.log(err);

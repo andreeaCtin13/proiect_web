@@ -83,7 +83,7 @@ const controller = {
     }
   },
 
-  updateUserIdProfAsociat: async (req, res) => {
+  updateUserById: async (req, res) => {
     let newUser = req.body;
     let { id_user } = req.params;
     console.log(id_user, newUser);
@@ -112,6 +112,16 @@ const controller = {
       .catch((err) => {
         res.status(500), send({ err: err });
       });
+  },
+
+  getUserByID: async (req, res) => {
+    const id = req.params.id;
+    const user = await usersModel.findByPk(id);
+    if (!user)
+      return res
+        .status(400)
+        .send({ message: "user not found, the id is not correct" });
+    return res.status(200).send({ message: "user found", user: user });
   },
 
   getStudentsByRequestStatusWithFilterAndPagination: async (req, res) => {

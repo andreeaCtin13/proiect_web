@@ -12,8 +12,7 @@ function StudentsRequests() {
   const [customers, setCustomers] = useState(null);
   const [declined, setDiclined] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null); 
-  const no_of_students = 9; //i have to think about it again when we link backend with frontend
-
+  const no_of_students = 9; 
     useEffect(()=>{
       setCustomers([{
         id: 1000,
@@ -50,7 +49,6 @@ function StudentsRequests() {
   
     const [selectedCustomer, setSelectedCustomer] = useState(null);
    
-
     const onGlobalFilterChange = (event) => {
       const value = event.target.value;
       let _filters = { ...filters };
@@ -77,19 +75,22 @@ function StudentsRequests() {
   
     const header = renderHeader();
     const [showModal, setShowModal] = useState(false);
+    const [showModalRow, setShowModalRow] = useState(false);
 
     const onRowSelect = (event) => {
       setSelectedRow(event.data);
-      setShowModal(true);
+      setShowModalRow(true);
     };
 
-  
     const showModalFunction = ()=>{
       setShowModal(true);
-  
     }
+
   
     const onHide = () => {
+      setShowModal(false);
+    };
+    const onHideModalRow = () => {
       setShowModal(false);
       setDiclined(false)
     };
@@ -149,8 +150,8 @@ function StudentsRequests() {
             </DataTable>
 
             <Modal
-            visible={showModal}
-            onHide={onHide}
+            visible={showModalRow}
+            onHide={onHideModalRow}
             header={selectedRow ? selectedRow.name +" - request" : ""}
             content={<div>
               {
