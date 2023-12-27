@@ -9,7 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 function SelectSessionsPage() {
   const [teacherInfo, setTeacherInfo] = useState({});
   const { globalUser, setGlobalUser } = useContext(UserContext);
-  let ok = 0;
 
   console.log(globalUser);
 

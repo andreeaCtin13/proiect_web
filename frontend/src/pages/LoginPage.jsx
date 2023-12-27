@@ -3,7 +3,7 @@ import BackgroundImage from "../images/login-register-image.jpg";
 import style from "../styles/LoginPage.module.css";
 import Form from "../components/General/Form";
 import Button from "../components/General/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,8 +11,9 @@ import { UserContext } from "../context/UserContext";
 
 function LoginPage() {
   const { globalUser, setGlobalUser } = useContext(UserContext);
-
   const [userInfo, setUserInfo] = useState({});
+  const navigate = useNavigate();
+
   const onChange = (e, name) => {
     setUserInfo({ ...userInfo, [name]: e.target.value });
   };
@@ -32,15 +33,14 @@ function LoginPage() {
       onChangeAction: onChange,
     },
   ];
+  console.log(globalUser)
 
   const login = async (e) => {
     e.preventDefault();
     const data = await axios
       .post("http://localhost:9000/users/login", userInfo)
       .then((response) => {
-        setGlobalUser({...response.data})
-        console.log(globalUser)
-
+        setGlobalUser({...response.data.user})
         return response.data;
       })
       .catch((error) => {
@@ -69,6 +69,8 @@ function LoginPage() {
         progress: undefined,
         theme: "colored",
         });
+        console.log(globalUser)
+        globalUser.isProfesor?navigate("/teacher/students-requests"):navigate("/user/teachers")
     }
   };
   return (
@@ -88,13 +90,11 @@ function LoginPage() {
               className={style.btnRegister}
             ></Button>
           </Link>
-          {/* <Link className={style.link} to={userStatus==="teacher"?"/teacher/students-requests":"/user/teachers"}> */}
           <Button
             content={"Login"}
             className={style.btnLogin}
             onClick={login}
           ></Button>
-          {/* </Link> */}
         </div>
       </div>
 
