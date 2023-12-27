@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Form from "../../components/General/Form"
 import style from "../../styles/teacher/SelectSessionPage.module.css"
 import Button from "../../components/General/Button"
+import { UserContext } from '../../context/UserContext'
 function SelectSessionsPage() {
   const [teacherInfo, setTeacherInfo] = useState({})
+  const { globalUser, setGlobalUser } = useContext(UserContext);
 
 
   const checkAndSendDates=()=>{
     //aici o s atrimitem catre back si o sa facem cateva validari
 
   }
-    
+  console.log("global:", globalUser)
+
   const onChange= (e,name)=>{
     console.log(e.target.value)
       setTeacherInfo({...teacherInfo, [name]:e.target.value})

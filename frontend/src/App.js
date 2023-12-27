@@ -72,11 +72,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [gloablUser, setGlobalUser] = useState(false);
+  const [globalUser, setGlobalUser] = useState(false);
 
   return (
     <div className="App">
-      <UserContext.Provider value={{ gloablUser, setGlobalUser }}>
+      <UserContext.Provider value={{ globalUser, setGlobalUser }}>
         <RouterProvider router={router}></RouterProvider>
       </UserContext.Provider>
     </div>

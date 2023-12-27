@@ -27,7 +27,6 @@ function Register() {
       setUserInfo({...userInfo, [name]:"student"})
     }
   }
-  console.log(userInfo)
   const fields=[
     {
       inputType: "text",
@@ -74,23 +73,12 @@ const register=async(e)=>{
     e.preventDefault();
     if(userInfo.userType === "student"){
       userInfo.isProfesor = false
-    }
-    else{
-      userInfo.isProfesor = true
-    }
-    const data = await axios
+      const data = await axios
       .post( "http://localhost:9000/users/register",userInfo)
       .then((response) => {
         const {user, jwtToken} = response.data
-        console.log(user)
-        // setGlobalUser(JSON.stringify(user,2,null))
-        // console.log(globalUser)
-        if(userInfo.isProfesor){
-          navigate("/teacher/select-sessions")
-        }
-        else{
-          console.log(globalUser)
-          toast.success('🦄 You created a new account, go to login to access it', {
+
+        toast.success('🦄 You created a new account, go to login to access it', {
             position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
@@ -99,16 +87,24 @@ const register=async(e)=>{
             draggable: true,
             progress: undefined,
             theme: "colored",
-            });
-        }
-
+          });
+        
+          setGlobalUser(user)
         return response.data
       })
       .catch((error) => {
         console.error(error);
       });
         console.log(data) 
-}
+    }
+    else{
+      userInfo.isProfesor = true
+      const user={...userInfo}
+      setGlobalUser(user)
+      navigate("/teacher/select-sessions")
+    }
+  }
+
   return (
     <div className={style.mainContainer}>
     <img src={BackgroundImage} alt="imagine-background" className={style.backgroundImage} />
