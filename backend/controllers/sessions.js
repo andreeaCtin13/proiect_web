@@ -6,12 +6,12 @@ const controller = {
     const newSessions = [...sessions];
     for (let i = 0; i < newSessions.length; i++) {
       if (newSessions[i].hasOwnProperty("data_inceput")) {
-        let data = newSessions[i].data_inceput.split("/");
+        let data = newSessions[i].data_inceput.split("-");
         let d = data.map((x) => Number(x));
         newSessions[i].data_inceput = new Date(d[2], d[1], d[0]);
       }
       if (newSessions[i].hasOwnProperty("data_final")) {
-        let data = newSessions[i].data_final.split("/");
+        let data = newSessions[i].data_final.split("-");
         let d = data.map((x) => Number(x));
         newSessions[i].data_final = new Date(d[2], d[1], d[0]);
       }

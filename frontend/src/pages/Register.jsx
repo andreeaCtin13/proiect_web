@@ -73,36 +73,35 @@ const register=async(e)=>{
     e.preventDefault();
     if(userInfo.userType === "student"){
       userInfo.isProfesor = false
-      const data = await axios
-      .post( "http://localhost:9000/users/register",userInfo)
-      .then((response) => {
-        const {user, jwtToken} = response.data
-
-        toast.success('🦄 You created a new account, go to login to access it', {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-        
-          setGlobalUser(user)
-        return response.data
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-        console.log(data) 
     }
     else{
       userInfo.isProfesor = true
-      const user={...userInfo}
-      setGlobalUser(user)
-      navigate("/teacher/select-sessions")
     }
+    const data = await axios
+    .post( "http://localhost:9000/users/register",userInfo)
+    .then((response) => {
+      const {user, jwtToken} = response.data
+      setGlobalUser(user)
+
+      toast.success('🦄 You created a new account, go to login to access it', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      
+      return response.data
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+     if(userInfo.userType==="teacher"){
+      navigate("/teacher/select-sessions")
+     } 
   }
 
   return (
