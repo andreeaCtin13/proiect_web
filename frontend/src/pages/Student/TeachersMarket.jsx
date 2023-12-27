@@ -12,62 +12,45 @@ import axios from "axios";
 function TeachersMarket() {
   const [customers, setCustomers] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null); 
+  const [page,setPage] = useState(1)
+  const [totalRec, setTotalRec]=useState(8)
+  const [lazyParams, setLazyParams] = useState({
+    first: 1,
+    rows: 10,
+    page: 1,
+});
+const [loading, setLoading] = useState(false);
+console.log(lazyParams)
+const loadData =async () =>{
+  setLoading(true);
+    const teacher_query = "teachers_query?"
+        const skip_value = 1
+          await 
+          axios.get(`http://localhost:9000/users/getAllTeachers/${teacher_query}?&take=8&skip=${page}`).then((response)=>{
+          console.log(response)
+          let teachers= response.data.requests.rows
+          setTotalRec(response.data.count)
+          setCustomers(teachers)
+        }).catch(err=>{
+          console.log(err)
+        })     
+        setLoading(false)
+}
 
     useEffect(()=>{
-      const teacher_query = "teachers_query?"
-      const skip_value = 1
-      const getAll = async()=>{
-        await axios.get(`http://localhost:9000/users/getAllTeachers/${teacher_query}?&take=10&skip=${skip_value}`).then((response)=>{
-        console.log(response)
-        let teachers= response.data.requests.rows
-     
-        setCustomers(teachers)
-      }).catch(err=>{
-        console.log(err)
-      })}
-      getAll()
-    },[])
-    const [filters, setFilters] = useState({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      nume: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      representative: { value: null, matchMode: FilterMatchMode.IN },
-      status: {
-        operator: FilterOperator.OR,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-      },
-    });
-  
-    const [selectedCustomer, setSelectedCustomer] = useState(null);
+      loadData()  
+    },[page])
    
-
-    const onGlobalFilterChange = (event) => {
-      const value = event.target.value;
-      let _filters = { ...filters };
-      _filters["global"].value = value;
-      setFilters(_filters);
+  
+    const onPageChange = (e) => {
+      console.log("ajung aici")
+      setLazyParams({
+        first: e.first,
+        rows: e.rows,
+        page: e.page,
+      });
     };
-  
-    const renderHeader = () => {
-      const value = filters["global"] ? filters["global"].value : "";
-  
-
-      return (
-        <span>
-          <i  />
-          <InputText
-            type="search"
-            value={value || ""}
-            onChange={(e) => onGlobalFilterChange(e)}
-            placeholder="Global Search"
-          />
-        </span>
-      );
-    };
-  
-    const header = renderHeader();
+    
     const [showModal, setShowModal] = useState(false);
 
     const onRowSelect = (event) => {
@@ -78,29 +61,14 @@ function TeachersMarket() {
     const onHide = () => {
       setShowModal(false);
     };
-  
+  console.log(customers)
   return (
     <div className={style.mainContainer}>
       <h1>Search for a teacher</h1>
- <div className={style.tableContain}>
-        <DataTable
-          value={customers}
-          paginator
-          rows={8}
-          onRowSelect={onRowSelect}
-          header={header}
-          filters={filters}
-          onFilter={(e) => setFilters(e.filters)}
-          selection={selectedCustomer}
-          onSelectionChange={(e) => {
-            setSelectedCustomer(e.value);
-          }}
-          selectionMode="single"
-          dataKey="id"
-          stateStorage="session"
-          stateKey="dt-state-demo-local"
-          emptyMessage="No students found."
-          tableStyle={{ minWidth: "50rem" }}
+      <div className={style.tableContain}>
+        <DataTable value={customers} lazy filterDisplay="row" responsiveLayout="scroll" dataKey="idUser"
+        paginator={true}  rows={10} totalRecords={totalRec} onPage={onPageChange}
+        loading={loading}
         >
           <Column
             field="nume"
