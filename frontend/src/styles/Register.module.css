@@ -18,6 +18,13 @@
   background-color: var(--var--ciocolatte);
 }
 
+.displayNone {
+  display: none;
+}
+
+.displayBloc {
+  display: block;
+}
 .btnLogin {
   border: 2px solid var(--var--dark--brown);
   color: var(--var--dark--brown);

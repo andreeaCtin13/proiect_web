@@ -14,7 +14,7 @@ function Register() {
   const { globalUser, setGlobalUser } = useContext(UserContext);
   const [userInfo, setUserInfo] = useState({})
   const navigate = useNavigate();
-
+  const [visible, setVisible]= useState(false)
 
   const onChange =(e, name)=>{
     setUserInfo({...userInfo, [name]:e.target.value})
@@ -22,11 +22,15 @@ function Register() {
   const onChecked=(e, name)=>{
     if(e.target.id==="Teacher"){
       setUserInfo({...userInfo, [name]:"teacher"})
+      setVisible(true)
+      
     }
     else{
+      setVisible(false)
       setUserInfo({...userInfo, [name]:"student"})
     }
   }
+
   const fields=[
     {
       inputType: "text",
@@ -71,7 +75,7 @@ function Register() {
 
 const register=async(e)=>{  
     e.preventDefault();
-    if(!userInfo.hasOwnProperty("nume") || !userInfo.hasOwnProperty("mail") ||!userInfo.hasOwnProperty("password") || !userInfo.hasOwnProperty("confirmPassword") || !userInfo.hasOwnProperty("userType")){
+    if(!userInfo.hasOwnProperty("nume") || !userInfo.hasOwnProperty("mail") ||!userInfo.hasOwnProperty("password") || !userInfo.hasOwnProperty("confirmPassword") || !userInfo.hasOwnProperty("userType") || (visible==true&&!userInfo.hasOwnProperty("nrMaximStudenti"))){
       toast.error("Please complete all the fields", {
         position: "top-right",
         autoClose: 3000,
@@ -97,18 +101,52 @@ const register=async(e)=>{
       });
       return
     }
-
-
     if(userInfo.userType === "student"){
       userInfo.isProfesor = false
-      const data = await axios
-      .post( "http://localhost:9000/users/register",userInfo)
-      .then((response) => {
-      
-        const {user, jwtToken} = response.data
-        setGlobalUser(user)
-  
-        toast.success('🦄 You created a new account, go to login to access it', {
+    }
+    else{
+      userInfo.isProfesor = true
+      if(Number.isNaN(parseInt(userInfo.nrMaximStudenti))){
+        toast.error("nu ai introdus un nr maxim de studenti valid", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        return;
+      }
+
+      setGlobalUser({...userInfo})
+      navigate("/teacher/select-sessions")
+    }
+
+    const data = await axios
+    .post( "http://localhost:9000/users/register",userInfo)
+    .then((response) => {
+    
+      const {user, jwtToken} = response.data
+      setGlobalUser(user)
+
+      toast.success('🦄 You created a new account, go to login to access it', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        return response.data
+
+      })  
+      .catch((error) => {
+        if(error.response.data.message === "Invalid email"){
+          toast.error("Invalid format for email", {
             position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
@@ -116,46 +154,25 @@ const register=async(e)=>{
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: "colored",
+            theme: "dark",
           });
-          return response.data
-
-        })  
-        .catch((error) => {
-          if(error.response.data.message === "Invalid email"){
-            toast.error("Invalid format for email", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-            });
-            return
-          }
-          if(error.response.data.message  === "Email already used"){
-            toast.error("Email already used", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-            });
-            return
-          }
-          console.error(error);
-        });
-    }
-    else{
-      userInfo.isProfesor = true
-      setGlobalUser({...userInfo})
-      navigate("/teacher/select-sessions")
-    }
+          return
+        }
+        if(error.response.data.message  === "Email already used"){
+          toast.error("Email already used", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          return
+        }
+        console.error(error);
+      });
   }
 
   return (
@@ -165,6 +182,10 @@ const register=async(e)=>{
     <div className={style.form}>
       <h2>Create your account</h2>
       <Form inputs = {fields}></Form>
+      <div  className={`${style.formRow} ${visible === false? style.displayNone:style.displayBlock}`}>
+        <label  className={style.label} htmlFor={"nrMaximStudenti"}>Nr.maxim studenti</label>
+        <input name={"nrMaximStudenti"} className={style.input} id={"nrMaximStudenti"} type={"number"}  onChange={(e)=>onChange(e, "nrMaximStudenti")} />                                      
+      </div>
       <div className={style.btnZone}>
       <Link to="/login" className={style.link}>
         <Button content={"Login"} className={style.btnLogin}></Button>
