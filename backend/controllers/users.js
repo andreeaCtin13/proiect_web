@@ -23,18 +23,6 @@ const sequelize = new Sequelize(
   }
 );
 
-async function getStudentsForTeacher(id_profesor) {
-  try {
-    // const [results, metadata] = await sequelize.query(
-    //   "SELECT id_request, date_semnatura_definitiva, tematica, status, pdf, feedback, nume FROM requests JOIN users WHERE requests.studentId=users.idUser"
-    // );
-    // return results;
-  } catch (error) {
-    console.error("Error fetching students:", error);
-    throw error;
-  }
-}
-
 const controller = {
   login: async (req, res) => {
     console.log(req.body);
@@ -74,24 +62,43 @@ const controller = {
           nr_maxim_studenti: nrMaximStudenti,
         });
         const jwtToken = generateAccessToken(user);
-        res.status(200).send({ user, jwtToken });
+        return res.status(200).json({ user, jwtToken });
       } else {
-        res.status(409).send({ message: "user deja existent" });
+        return res.status(409).json({ message: "user deja existent" });
       }
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      if (err.name === "SequelizeValidationError") {
+        return res.status(400).json({ message: "Invalid email" });
+      }
+      if (err.name === "SequelizeUniqueConstraintError") {
+        return res.status(400).json({ message: "Email already used" });
+      }
+      return res.status(500).json({ message: "server error", err: err });
     }
   },
 
   updateUserById: async (req, res) => {
     let newUser = req.body;
-    let { id_user } = req.params;
-    console.log(id_user, newUser);
+    let id_user = req.params.id_user;
+
+    // try {
+    //   const updatedROW = await usersModel.findByIdAndUpdate(id_user, newUser, {
+    //     returning: true,
+    //   });
+    //   console.log(updatedROW);
+    //   if (!updatedROW) {
+    //     return res.status(404).json({ error: "User not found" });
+    //   }
+    //   return res.status(200).send(updatedROW);
+    // } catch (err) {
+    //   return res.status(500).send({ message: "server error", err: err });
+    // }
+
     await usersModel
       .findByPk(id_user)
       .then(async (user) => {
         if (!user) {
-          res
+          return res
             .status(400)
             .send({ message: "nu ai introdus un id pentru profesor valid" });
         }
@@ -105,12 +112,13 @@ const controller = {
         where: {
           idUser: id_user,
         },
+        returning: true,
       })
-      .then(() => {
-        res.status(200).send(newUser);
+      .then((result) => {
+        return res.status(200).send(result);
       })
       .catch((err) => {
-        res.status(500), send({ err: err });
+        return res.status(500), send({ err: err });
       });
   },
 

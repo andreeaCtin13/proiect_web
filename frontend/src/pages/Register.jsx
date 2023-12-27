@@ -71,37 +71,91 @@ function Register() {
 
 const register=async(e)=>{  
     e.preventDefault();
+    if(!userInfo.hasOwnProperty("nume") || !userInfo.hasOwnProperty("mail") ||!userInfo.hasOwnProperty("password") || !userInfo.hasOwnProperty("confirmPassword") || !userInfo.hasOwnProperty("userType")){
+      toast.error("Please complete all the fields", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return
+    }
+    if(userInfo.password!==userInfo.confirmPassword){
+      toast.error("Passwords don't match", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return
+    }
+
+
     if(userInfo.userType === "student"){
       userInfo.isProfesor = false
+      const data = await axios
+      .post( "http://localhost:9000/users/register",userInfo)
+      .then((response) => {
+      
+        const {user, jwtToken} = response.data
+        setGlobalUser(user)
+  
+        toast.success('🦄 You created a new account, go to login to access it', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          return response.data
+
+        })  
+        .catch((error) => {
+          if(error.response.data.message === "Invalid email"){
+            toast.error("Invalid format for email", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            return
+          }
+          if(error.response.data.message  === "Email already used"){
+            toast.error("Email already used", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            return
+          }
+          console.error(error);
+        });
     }
     else{
       userInfo.isProfesor = true
-    }
-    const data = await axios
-    .post( "http://localhost:9000/users/register",userInfo)
-    .then((response) => {
-      const {user, jwtToken} = response.data
-      setGlobalUser(user)
-
-      toast.success('🦄 You created a new account, go to login to access it', {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      
-      return response.data
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-     if(userInfo.userType==="teacher"){
+      setGlobalUser({...userInfo})
       navigate("/teacher/select-sessions")
-     } 
+    }
   }
 
   return (

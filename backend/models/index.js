@@ -43,7 +43,12 @@ function FK_Config() {
 
   users.hasMany(sessions, {
     as: "sessions",
-    foreignKey: "id_prof_asociat",
+    foreignKey: {
+      name: "id_prof_asociat",
+      allowNull: false,
+      onDelete: "cascade",
+      hooks: true,
+    },
   });
 
   requests.belongsTo(users, {
@@ -56,9 +61,9 @@ function FK_Config() {
     foreignKey: "teacherId",
   });
 
-  sessions.belongsTo(users, {
-    foreignKey: { name: "id_prof_asociat", allowNull: false },
-  });
+  // sessions.belongsTo(users, {
+  //   foreignKey: { name: "id_prof_asociat", allowNull: false },
+  // });
 }
 
 function DB_Init() {

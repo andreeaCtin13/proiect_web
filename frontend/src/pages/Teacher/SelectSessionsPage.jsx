@@ -42,63 +42,87 @@ function SelectSessionsPage() {
       return;
     }
     else{
-      setGlobalUser({...globalUser, nr_maxim_studenti:teacherInfo.nrMaximStudenti})
-      console.log("inainte de put: ", globalUser)
-      await axios.put(`http://localhost:9000/users/updateUser/${globalUser.idUser}`, {...globalUser, nr_maxim_studenti:teacherInfo.nrMaximStudenti}).then((rezult)=>{
-        console.log("Va rog eu: ", rezult)
-      }).catch((err)=>{
-        console.log(err)
-      })
-    }
-
-    let sessions =[]
-    sessions.push({
-      data_inceput:teacherInfo.data_inceput_1,
-      data_final:teacherInfo.data_final_1,
-      id_prof_asociat:globalUser.idUser
-    })
-    sessions.push({
-      data_inceput:teacherInfo.data_inceput_2,
-      data_final:teacherInfo.data_final_2,
-      id_prof_asociat:globalUser.idUser
-    })
-    sessions.push({
-      data_inceput:teacherInfo.data_inceput_3,
-      data_final:teacherInfo.data_final_3,
-      id_prof_asociat:globalUser.idUser
-    })
-
-    const data = await axios
-    .post( "http://localhost:9000/users/register",globalUser)
-    .then((response) => {
-      const {user, jwtToken} = response.data
-
-      toast.success('🦄 You created a new account, go to login to access it', {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      
+      let ID = -1
+      const data = await axios
+      .post( "http://localhost:9000/users/register",{...globalUser, nr_maxim_studenti:teacherInfo.nrMaximStudenti})
+      .then((response) => {
+        const {user, jwtToken} = response.data
+        console.log("user returned", user)
+        ID = user.idUser
         setGlobalUser(user)
-      return response.data
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-    console.log("SESSIONS THAT ARE GOING TO BE INSERTED")
-    try {
-      const response = await axios.post("http://localhost:9000/sessions/insertBulkSession", sessions);
-      console.log("RESULT BULK SESSIONS:", response.data);
-    } catch (error) {
-      console.error("Error during bulk session insertion:", error.message);
-    }
+        console.log("global pizda ma sii", globalUser)
+        toast.success('🦄 You created a new account, go to login to access it', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          return response.data
+
+        })  
+        .catch((error) => {
+          if(error.response.data.message === "Invalid email"){
+            toast.error("Invalid format for email", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            return
+          }
+          if(error.response.data.message  === "Email already used"){
+            toast.error("Email already used", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            return
+          }
+          console.error(error);
+        });
+        if(ID!=-1){
+        let sessions =[]
+        sessions.push({
+          data_inceput:teacherInfo.data_inceput_1,
+          data_final:teacherInfo.data_final_1,
+          id_prof_asociat:ID
+        })
+        sessions.push({
+          data_inceput:teacherInfo.data_inceput_2,
+          data_final:teacherInfo.data_final_2,
+          id_prof_asociat:ID
+        })
+        sessions.push({
+          data_inceput:teacherInfo.data_inceput_3,
+          data_final:teacherInfo.data_final_3,
+          id_prof_asociat:ID     })
+        console.log("VEZI AICI BRE", sessions)
+
     
-    console.log(data)
+        try {
+          const response = await axios.post("http://localhost:9000/sessions/insertBulkSession", sessions);
+          console.log("RESULT BULK SESSIONS:", response.data);
+        } catch (error) {
+          console.error("Error during bulk session insertion:", error.message);
+        }
+      }
+        
+    }
+
+ 
   }
 
   const onChange= (e,name)=>{

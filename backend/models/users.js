@@ -21,7 +21,9 @@ module.exports = (sequelize, DataTypes) => {
     mail: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
+        is: /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/gm,
         isEmail: true,
         len: [3, 40],
       },
