@@ -34,6 +34,8 @@ function LoginPage() {
     },
   ];
   console.log(globalUser)
+  let ID=-1
+  let isProfesor = false
 
   const login = async (e) => {
     e.preventDefault();
@@ -41,6 +43,8 @@ function LoginPage() {
       .post("http://localhost:9000/users/login", userInfo)
       .then((response) => {
         setGlobalUser({...response.data.user})
+        ID = response.data.user.idUser
+        response.data.user.isProfesor? isProfesor=true:isProfesor=false
         return response.data;
       })
       .catch((error) => {
@@ -70,7 +74,25 @@ function LoginPage() {
         theme: "colored",
         });
         console.log(globalUser)
-        globalUser.isProfesor?navigate("/teacher/students-requests"):navigate("/user/teachers")
+
+        if(isProfesor){
+          const sessions_exist = await axios.get(`http://localhost:9000/sessions/getAllSessions/${ID}`).then((rez)=>{
+            console.log(rez.data)
+            if(rez.data.length=== 0){
+              console.log("ajung aici")
+              navigate("/teacher/select-sessions")
+            }
+            else{
+              navigate("/teacher/students-requests")
+            }
+          }).catch((err)=>{
+            console.log(err)
+          })
+        }
+        else{
+          navigate("/user/teachers")
+        }
+      
     }
   };
   return (
