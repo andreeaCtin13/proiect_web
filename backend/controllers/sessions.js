@@ -1,5 +1,13 @@
 const sessionsModel = require("../models").sessions;
 const usersModel = require("../models").users;
+
+const overlap = (p1, p2) => {
+  return (
+    (p1.data_inceput <= p2.data_inceput && p1.data_final >= p2.data_inceput) ||
+    (p2.data_inceput <= p1.data_inceput && p2.data_final >= p1.data_inceput)
+  );
+};
+
 const controller = {
   insertBulkSessions: async (req, res) => {
     const sessions = req.body;
@@ -44,6 +52,16 @@ const controller = {
           message: "nu ai introdus id-ul profului asociat",
           position: i,
         });
+      }
+    }
+
+    for (let i = 0; i < newSessions.length - 1; i++) {
+      const currentPeriod = newSessions[i];
+      const nextPeriod = newSessions[i + 1];
+      if (overlap(currentPeriod, nextPeriod)) {
+        return res
+          .status(400)
+          .send({ message: "The sessions are overlapping" });
       }
     }
 

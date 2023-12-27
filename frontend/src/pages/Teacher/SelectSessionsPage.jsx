@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 function SelectSessionsPage() {
   const [teacherInfo, setTeacherInfo] = useState({})
   const { globalUser, setGlobalUser } = useContext(UserContext);
+  let ok=0;
 
   console.log(globalUser)
 
@@ -28,6 +29,7 @@ function SelectSessionsPage() {
       });
       return;
     }
+    
     if(Number.isNaN(parseInt(teacherInfo.nrMaximStudenti))){
       toast.error("nu ai introdus un nr maxim de studenti valid", {
         position: "top-right",
@@ -43,6 +45,7 @@ function SelectSessionsPage() {
     }
     else{
       let ID = -1
+      if(ok==0){
       const data = await axios
       .post( "http://localhost:9000/users/register",{...globalUser, nr_maxim_studenti:teacherInfo.nrMaximStudenti})
       .then((response) => {
@@ -50,7 +53,7 @@ function SelectSessionsPage() {
         console.log("user returned", user)
         ID = user.idUser
         setGlobalUser(user)
-        console.log("global pizda ma sii", globalUser)
+        ok=1
         toast.success('🦄 You created a new account, go to login to access it', {
             position: "top-right",
             autoClose: 3000,
@@ -93,6 +96,7 @@ function SelectSessionsPage() {
           }
           console.error(error);
         });
+      }
         if(ID!=-1){
         let sessions =[]
         sessions.push({
@@ -116,6 +120,32 @@ function SelectSessionsPage() {
           const response = await axios.post("http://localhost:9000/sessions/insertBulkSession", sessions);
           console.log("RESULT BULK SESSIONS:", response.data);
         } catch (error) {
+          if(error.response.data.message === "The sessions are overlapping"){
+            toast.error("Sessions are overlapping", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            return
+          }
+          if(error.response.data.message === "Eroare validitate date"){
+            toast.error("Final date before Starting Date", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            return
+          }
           console.error("Error during bulk session insertion:", error.message);
         }
       }
