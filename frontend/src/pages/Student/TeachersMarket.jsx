@@ -35,7 +35,12 @@ const loadData =async () =>{
             setTotalRec(1)
           }
           else{
-            setTotalRec(Math.round(response.data.requests.count/8))
+            if(response.data.requests.count%8!=0){
+              setTotalRec(Math.round(response.data.requests.count/8)+1)
+            }
+            else{
+              setTotalRec(Math.round(response.data.requests.count/8))
+            }
           }
           setTeachers(teachers)
         }).catch(err=>{
@@ -147,7 +152,7 @@ console.log(titleRequest)
         <DataTable value={teachers}  filterDisplay="row" responsiveLayout="scroll" dataKey="idUser"
      rows={10} totalRecords={totalRec} 
      onRowClick={onRowSelect}
-        >
+        > 
           <Column
             field="nume"
             header="Name"

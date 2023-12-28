@@ -187,6 +187,7 @@ const controller = {
     if (filter.status) whereClause.status = { [EqOp]: filter.status };
     if (filter.nume) whereIncludeClause.nume = { [LikeOp]: `%${filter.nume}` };
 
+    whereIncludeClause.idUser = id_student;
     await requestsModel
       .findAndCountAll({
         include: [

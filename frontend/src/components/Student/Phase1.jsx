@@ -1,89 +1,89 @@
 import React from 'react'
 import style from "../../styles/student/CurrentStatusPage.module.css";
 import { useState, useEffect } from "react";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { InputText } from "primereact/inputtext";
-import { Dropdown } from "primereact/dropdown";
 import { Tag } from "primereact/tag";
 import Modal from "../../components/General/Modal";
-function Phase1() {
-    const [customers, setCustomers] = useState(null);
-    const [selectedRow, setSelectedRow] = useState(null); // Add this line
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronRight,
+  faChevronLeft
+} from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { useContext } from 'react';
+import { UserContext } from '../../context/UserContext';
 
+
+function Phase1() {
+    const [requests, setRequests] = useState(null);
+    const [selectedRow, setSelectedRow] = useState(null); 
+    const [page, setPage] = useState(1)
+    const [totalRec, setTotalRec]=useState(1)
+    const { globalUser, setGlobalUser } = useContext(UserContext);
+
+    const loadData=async()=>{
+      const teacher_query = "teacher_query?"
+      
+      const data = await axios.get(`http://localhost:9000/users/getAllTeachersRequests/${globalUser.idUser}/${teacher_query}&take=8&skip=${page}`)
+      let req=[]
+      if(data.data.requests.count<=8){
+        setTotalRec(1)
+      }
+      else{
+        if(data.data.requests.count%8!=0){
+          setTotalRec(Math.round(data.data.requests.count/8)+1)
+        }
+        else{
+          setTotalRec(Math.round(data.data.requests.count/8))
+        }
+      }
+      for(let obj in data.data.requests.rows)
+      {  
+        console.log("obj", obj)
+        let {id_request, status, studentRequests,tematica } =data.data.requests.rows[obj]
+        console.log(studentRequests,"mai sus")
+        let {nume, mail} = studentRequests
+        req.push({
+          id_request, nume, mail, status,tematica
+        })
+      }
+      setRequests(req)
+      console.log(data.data.requests.rows)
+
+    }
+
+    console.log(requests)
 
     useEffect(()=>{
-      setCustomers([{
-        id: 1000,
-        name: 'Andreea Constantin',
-        company: 'Benton, John B Jr',
-        date: '2015-09-13',
-        status: 'unqualifiable',
-        verified: true,
-        activity: 17,
-        balance: 70663
-    },
-    {
-      id: 2000,
-      name: 'Elena Caravan',
-      company: 'Benton, John B Jr',
-      date: '2015-09-13',
-      status: 'qualified',
-      verified: true,
-      activity: 17,
-      balance: 70663
-  },
-  {
-    id: 88,
-    name: 'Valeriu Carasel',
-    company: 'Benton, John B Jr',
-    date: '2015-09-13',
-    status: 'qualified',
-    verified: true,
-    activity: 17,
-    balance: 70663
-  },])
-    },[])
-    const [filters, setFilters] = useState({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      name: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      "country.name": {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      representative: { value: null, matchMode: FilterMatchMode.IN },
-      status: {
-        operator: FilterOperator.OR,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-      },
-    });
+      loadData()
+    },[page])
   
-    const [selectedCustomer, setSelectedCustomer] = useState(null);
+    const onPageChange = (e,type_event) => {
+      if(type_event==="next"){
+        if(page!=totalRec){
+          setPage(page+1)
+        }
+      }
+      else{
+        if(page!=1){
+          setPage(page-1)
+        }
+      }
+    };
+    const [selectedRequests, setSelectedRequests] = useState(null);
    
     const statuses = [
-      "unqualified",
-      "qualified",
-      "new",
-      "negotiation",
-      "renewal",
+      "rejected",
+      "pending",
     ];
   
     const getSeverity = (status) => {
       switch (status) {
-        case "unqualified":
+        case "rejected":
           return "danger";
   
-        case "qualified":
-          return "success";
-  
-        case "new":
-          return "info";
-  
-        case "negotiation":
+        case "pending":
           return "warning";
   
         default:
@@ -98,48 +98,12 @@ function Phase1() {
       );
     };
   
-    const statusFilterTemplate = (options) => {
-      return (
-        <Dropdown
-          value={options.value}
-          options={statuses}
-          onChange={(e) => options.filterCallback(e.value, options.index)}
-          itemTemplate={statusItemTemplate}
-          placeholder="Select One"
-          showClear
-        />
-      );
-    };
-  
+
     const statusItemTemplate = (option) => {
       return <Tag value={option} severity={getSeverity(option)} />;
     };
   
-    const onGlobalFilterChange = (event) => {
-      const value = event.target.value;
-      let _filters = { ...filters };
-      _filters["global"].value = value;
-      setFilters(_filters);
-    };
-  
-    const renderHeader = () => {
-      const value = filters["global"] ? filters["global"].value : "";
-  
 
-      return (
-        <span>
-          <i  />
-          <InputText
-            type="search"
-            value={value || ""}
-            onChange={(e) => onGlobalFilterChange(e)}
-            placeholder="Global Search"
-          />
-        </span>
-      );
-    };
-  
-    const header = renderHeader();
     const [showModal, setShowModal] = useState(false);
 
     const onRowSelect = (event) => {
@@ -158,29 +122,24 @@ function Phase1() {
         </h2>
       <div className={style.tableContain}>
         <DataTable
-          value={customers}
-          paginator
-          rows={5}
-        onRowSelect={onRowSelect}
-          header={header}
-          filters={filters}
-          onFilter={(e) => setFilters(e.filters)}
-          selection={selectedCustomer}
+         dataKey="id_request"
+          value={requests}
+          rows={8}
+          onRowSelect={onRowSelect}
+          selection={selectedRequests}
           onSelectionChange={(e) =>{ 
-            setSelectedCustomer(e.value)
+            setSelectedRequests(e.value)
           }}
           selectionMode="single"
-          dataKey="id"
           stateStorage="session"
           stateKey="dt-state-demo-local"
-          emptyMessage="No customers found."
+          emptyMessage="No requests made."
           tableStyle={{ minWidth: "50rem" }}
         >
           <Column
-            field="name"
+            field="nume"
             header="Name"
             sortable
-            filter
             filterPlaceholder="Search"
             style={{ width: "25%" }}
           ></Column>
@@ -190,17 +149,20 @@ function Phase1() {
             header="Status"
             body={statusBodyTemplate}
             sortable
-            filter
-            filterElement={statusFilterTemplate}
             filterMenuStyle={{ width: "14rem" }}
             style={{ width: "25%" }}
           ></Column>
         </DataTable>
+        <div className={style.paginationZone}>
+        <button className={style.btnPagination} onClick={(e)=>onPageChange(e,"prev")}><FontAwesomeIcon icon={faChevronLeft} /></button>  
+        <span>Page {page} from {totalRec}</span>
+        <button className={style.btnPagination} onClick={(e)=>onPageChange(e,"next")}><FontAwesomeIcon icon={faChevronRight} /></button>
+      </div>
 
         <Modal
         visible={showModal}
         onHide={onHide}
-        header={selectedRow ? selectedRow.name : ""}
+        header={selectedRow ? selectedRow.nume : ""}
         content={<p>ceva text evdem cand facem legatura cu backend ul</p>} 
       />      </div>
     </div>
