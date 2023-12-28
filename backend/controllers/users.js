@@ -81,19 +81,6 @@ const controller = {
     let newUser = req.body;
     let id_user = req.params.id_user;
 
-    // try {
-    //   const updatedROW = await usersModel.findByIdAndUpdate(id_user, newUser, {
-    //     returning: true,
-    //   });
-    //   console.log(updatedROW);
-    //   if (!updatedROW) {
-    //     return res.status(404).json({ error: "User not found" });
-    //   }
-    //   return res.status(200).send(updatedROW);
-    // } catch (err) {
-    //   return res.status(500).send({ message: "server error", err: err });
-    // }
-
     await usersModel
       .findByPk(id_user)
       .then(async (user) => {

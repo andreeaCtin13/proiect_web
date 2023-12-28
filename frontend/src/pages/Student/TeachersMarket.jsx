@@ -8,33 +8,28 @@ import Modal from "../../components/General/Modal";
 import style from "../../styles/student/TeacherMarket.module.css"
 import Button from '../../components/General/Button';
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronRight,
+  faChevronLeft
+} from "@fortawesome/free-solid-svg-icons";
 
 function TeachersMarket() {
   const [customers, setCustomers] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null); 
   const [page,setPage] = useState(1)
   const [totalRec, setTotalRec]=useState(8)
-  const [lazyParams, setLazyParams] = useState({
-    first: 1,
-    rows: 10,
-    page: 1,
-});
-const [loading, setLoading] = useState(false);
-console.log(lazyParams)
+
 const loadData =async () =>{
-  setLoading(true);
     const teacher_query = "teachers_query?"
-        const skip_value = 1
           await 
           axios.get(`http://localhost:9000/users/getAllTeachers/${teacher_query}?&take=8&skip=${page}`).then((response)=>{
-          console.log(response)
           let teachers= response.data.requests.rows
-          setTotalRec(response.data.count)
+          setTotalRec(Math.round(response.data.requests.count/8))
           setCustomers(teachers)
         }).catch(err=>{
           console.log(err)
         })     
-        setLoading(false)
 }
 
     useEffect(()=>{
@@ -42,13 +37,17 @@ const loadData =async () =>{
     },[page])
    
   
-    const onPageChange = (e) => {
-      console.log("ajung aici")
-      setLazyParams({
-        first: e.first,
-        rows: e.rows,
-        page: e.page,
-      });
+    const onPageChange = (e,type_event) => {
+      if(type_event==="next"){
+        if(page!=totalRec){
+          setPage(page+1)
+        }
+      }
+      else{
+        if(page!=1){
+          setPage(page-1)
+        }
+      }
     };
     
     const [showModal, setShowModal] = useState(false);
@@ -66,9 +65,10 @@ const loadData =async () =>{
     <div className={style.mainContainer}>
       <h1>Search for a teacher</h1>
       <div className={style.tableContain}>
-        <DataTable value={customers} lazy filterDisplay="row" responsiveLayout="scroll" dataKey="idUser"
-        paginator={true}  rows={10} totalRecords={totalRec} onPage={onPageChange}
-        loading={loading}
+        <DataTable value={customers}  filterDisplay="row" responsiveLayout="scroll" dataKey="idUser"
+     rows={10} totalRecords={totalRec} 
+     onRowClick={onRowSelect}
+     
         >
           <Column
             field="nume"
@@ -91,8 +91,11 @@ const loadData =async () =>{
             style={{ width: "25%" }}
           ></Column>
         </DataTable>
-
-        
+      <div className={style.paginationZone}>
+        <button className={style.btnPagination} onClick={(e)=>onPageChange(e,"prev")}><FontAwesomeIcon icon={faChevronLeft} /></button>  
+        <span>Page {page} from {totalRec}</span>
+        <button className={style.btnPagination} onClick={(e)=>onPageChange(e,"next")}><FontAwesomeIcon icon={faChevronRight} /></button>
+      </div>
       </div>{" "}
       <Modal
             visible={showModal}
