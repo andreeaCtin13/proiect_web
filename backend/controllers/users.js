@@ -6,7 +6,7 @@ const saltRounds = 10;
 const { Sequelize } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const env = require("dotenv");
-const { LikeOp, EqOp } = require("./operators");
+const { LikeOp, EqOp, NotEqOp } = require("./operators");
 
 env.config();
 const generateAccessToken = (user) => {
@@ -130,7 +130,6 @@ const controller = {
     let whereIncludeClause = {};
     if (filter.status) whereClause.status = { [EqOp]: filter.status };
     if (filter.nume) whereIncludeClause.nume = { [LikeOp]: `%${filter.nume}` };
-
     await requestsModel
       .findAndCountAll({
         include: [
@@ -160,6 +159,7 @@ const controller = {
 
     let whereClause = {};
     if (filter.nume) whereClause.nume = { [LikeOp]: `%${filter.nume}%` };
+    whereClause.nr_maxim_studenti = { [NotEqOp]: null, [NotEqOp]: 0 };
 
     await usersModel
       .findAndCountAll({

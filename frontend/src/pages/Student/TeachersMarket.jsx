@@ -1,32 +1,43 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
-import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { InputText } from "primereact/inputtext";
 import Modal from "../../components/General/Modal";
 import style from "../../styles/student/TeacherMarket.module.css"
 import Button from '../../components/General/Button';
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   faChevronRight,
   faChevronLeft
 } from "@fortawesome/free-solid-svg-icons";
+import { UserContext } from '../../context/UserContext';
+import { useContext } from 'react';
 
 function TeachersMarket() {
-  const [customers, setCustomers] = useState(null);
+  const [teachers, setTeachers] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null); 
   const [page,setPage] = useState(1)
-  const [totalRec, setTotalRec]=useState(8)
+  const [totalRec, setTotalRec]=useState(1)
+  const [idRequest, setIdRequest] = useState(null)
+  const [titleRequest, setTitleRequest] = useState("")
+  const { globalUser, setGlobalUser } = useContext(UserContext);
+
 
 const loadData =async () =>{
     const teacher_query = "teachers_query?"
           await 
           axios.get(`http://localhost:9000/users/getAllTeachers/${teacher_query}?&take=8&skip=${page}`).then((response)=>{
           let teachers= response.data.requests.rows
-          setTotalRec(Math.round(response.data.requests.count/8))
-          setCustomers(teachers)
+          if(response.data.requests.count<=8){
+            setTotalRec(1)
+          }
+          else{
+            setTotalRec(Math.round(response.data.requests.count/8))
+          }
+          setTeachers(teachers)
         }).catch(err=>{
           console.log(err)
         })     
@@ -54,28 +65,93 @@ const loadData =async () =>{
 
     const onRowSelect = (event) => {
       setSelectedRow(event.data);
-      setShowModal(true);
+      setIdRequest(event.data.idUser)
+      setShowModal(true);    
     };
   
     const onHide = () => {
       setShowModal(false);
     };
-  console.log(customers)
+
+    const sendRequest =async () =>{
+      console.log(titleRequest)
+      if(titleRequest!==""){
+        console.log("intru aici")
+
+        const newReq = {
+          studentId: globalUser.idUser,
+          teacherId: idRequest,
+          status:"pending",
+          tematica:titleRequest,
+          pdf:null, feedback:null, 
+        }
+        try{
+        const sentRequest = await axios.post("http://localhost:9000/requests/addRequest", newReq);
+          if(sentRequest.hasOwnProperty("message")){
+            toast.error("You have to complete the textarea", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+          }
+          else{
+            toast.success('🦄 Your request has been sent', {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              });
+            }
+            setTitleRequest("")
+        }catch(err){
+          toast.error(err, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          console.log(err)
+        }
+      
+      }else{
+        toast.error("You have to complete the textarea", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } 
+    }
+console.log(titleRequest)
   return (
     <div className={style.mainContainer}>
       <h1>Search for a teacher</h1>
       <div className={style.tableContain}>
-        <DataTable value={customers}  filterDisplay="row" responsiveLayout="scroll" dataKey="idUser"
+        <DataTable value={teachers}  filterDisplay="row" responsiveLayout="scroll" dataKey="idUser"
      rows={10} totalRecords={totalRec} 
      onRowClick={onRowSelect}
-     
         >
           <Column
             field="nume"
             header="Name"
             sortable
-            filter
-            filterPlaceholder="Search"
             style={{ width: "25%" }}
           ></Column>
           <Column
@@ -85,7 +161,7 @@ const loadData =async () =>{
             style={{ width: "25%" }}
           ></Column>
           <Column
-            field="no_of_students"
+            field="nr_maxim_studenti"
             header="Disponible"
             sortable
             style={{ width: "25%" }}
@@ -102,10 +178,23 @@ const loadData =async () =>{
             onHide={onHide}
             header={selectedRow ? selectedRow.name : ""}
             content={<div className={style.modalContent}>
-             <textarea className={style.inputRequest} type="text" placeholder='Write the subject for your disertation...'/>
-              <Button content={"Send request"} className={style.btnSendRequest}></Button>
+             <textarea className={style.inputRequest} type="text" onChange={(e)=>{setTitleRequest(e.target.value)}} value={titleRequest} placeholder='Write the subject for your disertation...'/>
+              <Button content={"Send request"} className={style.btnSendRequest} onClick={sendRequest}></Button>
             </div>}/>  
+        <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
+    
   )
 }
 

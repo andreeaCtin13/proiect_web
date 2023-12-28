@@ -13,31 +13,29 @@ const storage = multer.diskStorage({
 
 const controller = {
   addRequest: async (req, res) => {
-    const { tematica, status, pdf, feedback, id_student, id_profesor } =
-      req.body;
-    const date = new Date();
+    console.log(req.body);
 
+    const { tematica, status, pdf, feedback, studentId, teacherId } = req.body;
+    const date = new Date();
     await usersModel
-      .findByPk(id_student)
+      .findByPk(studentId)
       .then(async (student) => {
         if (student) {
           if (student.isProfesor) {
-            res.status(404).json({
+            return res.status(404).json({
               message:
                 "ati introdus un id de profesor in loc de unul de student",
             });
-            return;
           } else {
             await usersModel
-              .findByPk(id_profesor)
+              .findByPk(teacherId)
               .then(async (teacher) => {
                 if (teacher) {
                   if (!teacher.isProfesor) {
-                    res.status(404).json({
+                    return res.status(404).json({
                       message:
                         "ai introdus un id de student in loc de unul de profesor",
                     });
-                    return;
                   } else {
                     await requestModel
                       .create({
@@ -46,51 +44,49 @@ const controller = {
                         status,
                         pdf,
                         feedback,
-                        studentId: id_student,
-                        teacherId: id_profesor,
+                        studentId: studentId,
+                        teacherId: teacherId,
                       })
                       .then((request) => {
                         if (request) {
-                          res.status(200).send(request);
+                          return res.status(200).send(request);
                         } else {
-                          res
+                          return res
                             .status(400)
                             .json({ message: "ERROR IN INSERT REQUEST" });
                         }
                       })
                       .catch((err) => {
                         console.log(err);
-                        res
+                        return res
                           .status(500)
                           .json({ message: "SERVER ERROR IN INSERT REQUEST" });
                       });
                   }
                 } else {
-                  res.status(500).send({
+                  return res.status(500).send({
                     message: "nu exista un profesor cu respectivul id",
                   });
-                  return;
                 }
               })
               .catch((err) => {
                 console.log(err);
-                res
+                return res
                   .status(500)
                   .json({ message: "problema la findByPk pt id_teacher" });
-                return;
               });
           }
         } else {
-          res
+          return res
             .status(404)
             .json({ message: "nu exista un student cu respectivul id" });
-          return;
         }
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json({ message: "problema la findByPk pt id_student" });
-        return;
+        return res
+          .status(500)
+          .json({ message: "problema la findByPk pt id_student" });
       });
   },
   updateRequest: async (req, res) => {
