@@ -1,34 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import style from "../../styles/teacher/SessionsView.module.css"
 import { Link } from 'react-router-dom'
+import axios from "axios";
+import { UserContext } from '../../context/UserContext';
+import { useContext } from 'react';
+
 function SessionsView() {
-  const sessions = [
-    {
-      dataInceput:"12/02/2003",
-      dataFinal:"14/09/2009"
-    },
-    {
-      dataInceput:"13/02/2003",
-      dataFinal:"14/05/2009"
-    },
-    {
-      dataInceput:"09/02/2003",
-      dataFinal:"18/02/2009"
-    }
-  ]
-  const user = {
-    nume:"Toma Cristian"
+  const [sessions, setSessions] = useState([])
+  const { globalUser, setGlobalUser } = useContext(UserContext);
+
+  const loadData = async()=>{
+    let resp = await axios.get(`http://localhost:9000/sessions/getAllSessions/${globalUser.idUser}`)
+    setSessions(resp.data)
   }
+  useEffect(()=>{
+   loadData()
+  },[])
+
+
   return (
     <div className={style.mainContainer}>
       <Link className={style.backButton} to={"/teacher/students-requests"}>
         <div >&lt;</div>
       </Link>
-      <h1 className={style.title}>Hi, {user.nume}!! Here are your sessions:</h1>
+      <h1 className={style.title}>Hi, {globalUser.nume}!! Here are your sessions:</h1>
       <div className={style.containerSessions}>
         {
           sessions.map((x, index)=>{
-            return <div>Session {index+1} ( {x.dataInceput} - {x.dataFinal} )</div>
+            console.log(x,index)
+            let data2 = x.data_final.substr(0, 10)
+            let data1 = x.data_inceput.substr(0, 10)
+
+            return <div>Session {index+1} {data1}-{data2}</div>
           })
         }
       </div>
