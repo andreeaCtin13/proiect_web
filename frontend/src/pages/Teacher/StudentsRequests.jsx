@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useState } from 'react';
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { DataTable } from "primereact/datatable";
@@ -8,27 +8,51 @@ import Modal from "../../components/General/Modal";
 import style from "../../styles/teacher/StudentsRequests.module.css"
 import Button from '../../components/General/Button';
 import { Link } from 'react-router-dom';
+import axios from "axios";
+import { UserContext } from '../../context/UserContext';
+
 function StudentsRequests() {
   const [customers, setCustomers] = useState(null);
   const [declined, setDiclined] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null); 
+  const [page,setPage] = useState(1)
+  const [totalRec, setTotalRec]=useState(1)
+  const { globalUser, setGlobalUser } = useContext(UserContext);
+
+  const loadData = async()=>{
+    const students_query = "student_query?status=pending"
+    await 
+    axios.get(`http://localhost:9000/users/getAllStudentsRequest/${globalUser.idUser}/${students_query}&take=8&skip=${page}`).then((response)=>{
+    let students= response.data.requests.rows
+    let req =[] 
+    for(let i= 0;i<students.length;i++){
+      let stud = {...students[i].studentRequests}
+      let {status, tematica, id_request}=students[i]
+      req.push({
+        id_request, status, tematica, ...stud
+      })
+      console.log(req)
+    }
+    setCustomers(req)
+    if(response.data.requests.count<=8){
+      setTotalRec(1)
+    }
+    else{
+      if(response.data.requests.count%8!=0){
+        setTotalRec(Math.round(response.data.requests.count/8)+1)
+      }
+      else{
+        setTotalRec(Math.round(response.data.requests.count/8))
+      }
+    }
+    setCustomers(req)
+  }).catch(err=>{
+    console.log(err)
+  })     
+  }
   const no_of_students = 9; 
     useEffect(()=>{
-      setCustomers([{
-        id: 1000,
-        name: 'Andreea Constantin',
-        titlu_disertatie:"hahahah",
-    },
-    {
-      id: 2000,
-      name: 'Elena Caravan',
-      titlu_disertatie:"hahahah2",
-  },
-  {
-    id: 88,
-    name: 'Valeriu Carasel',
-    titlu_disertatie:"hahahah3",
-  },])
+     loadData()
     },[])
     const [filters, setFilters] = useState({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -85,13 +109,12 @@ function StudentsRequests() {
     const showModalFunction = ()=>{
       setShowModal(true);
     }
-
   
     const onHide = () => {
       setShowModal(false);
     };
     const onHideModalRow = () => {
-      setShowModal(false);
+      setShowModalRow(false);
       setDiclined(false)
     };
   
@@ -115,34 +138,28 @@ function StudentsRequests() {
           <div className={style.tableContain}>
             <DataTable
               value={customers}
-              paginator
               rows={5}
               onRowSelect={onRowSelect}
-              header={header}
-              filters={filters}
-              onFilter={(e) => setFilters(e.filters)}
               selection={selectedCustomer}
               onSelectionChange={(e) =>{ 
                 setSelectedCustomer(e.value)
               }}
               selectionMode="single"
-              dataKey="id"
+              dataKey="id_request"
               stateStorage="session"
               stateKey="dt-state-demo-local"
               emptyMessage="No students found."
               tableStyle={{ minWidth: "50rem" }}
             >
               <Column
-                field="name"
+                field="nume"
                 header="Name"
                 sortable
-                filter
-                filterPlaceholder="Search"
                 style={{ width: "25%" }}
               ></Column>
 
               <Column
-                field="titlu_disertatie"
+                field="tematica"
                 header="Titlu Disertatie"
                 sortable
                 style={{ width: "25%" }}
@@ -152,16 +169,16 @@ function StudentsRequests() {
             <Modal
             visible={showModalRow}
             onHide={onHideModalRow}
-            header={selectedRow ? selectedRow.name +" - request" : ""}
+            header={selectedRow ? selectedRow.nume +" - request" : ""}
             content={<div>
               {
                 declined === false ? <div className={style.contentModal}>
-                  <Button content={"Accept it"} className={style.btnAccept}></Button>
+                  <Button content={"Accept it"} className={style.btnAccept} onClick={onHideModalRow}></Button>
                   <Button content={"Decline it"} className={style.btnDecline} onClick={()=>{setDiclined(true)}}></Button>
                 </div>:<div className={style.contentModal}>
                 <input type='text' className={style.feedbackInput} placeholder='Write  your feedback...'></input>
                 <br />
-                <Button content={"Send it"} className={style.sendItButton}></Button>
+                <Button content={"Send it"}onClick={onHideModalRow} className={style.sendItButton}></Button>
                 </div>
               }
             </div>}/>      
@@ -174,7 +191,7 @@ function StudentsRequests() {
               <div>Are you sure you want to logout?</div>
               <div className={style.btnZone}>
               <Link to ="/" className={style.link}>
-                <Button content={"Yes"} className={style.btnLogoutYes}></Button>
+                <Button content={"Yes"} className={style.btnLogoutYes} onClick={onHide}></Button>
               </Link>
               <Button content={"No"} className={style.btnLogoutNo} onClick={onHide}></Button>
               </div>
