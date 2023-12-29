@@ -76,8 +76,10 @@ function AcceptedStudents() {
   const [showModal, setShowModal] = useState(false);
 
   const onRowSelect = (event) => {
+    if(event.data.status==="accepted"){
       setSelectedRow(event.data);
       setShowModal(true);  
+    }
   };
 
   const onHide = () => {
@@ -120,6 +122,12 @@ function AcceptedStudents() {
           <Column
             field="tematica"
             header="Titlu Disertatie"
+            sortable
+            style={{ width: "25%" }}
+          ></Column>
+            <Column
+            field="status"
+            header="Status"
             sortable
             style={{ width: "25%" }}
           ></Column>
