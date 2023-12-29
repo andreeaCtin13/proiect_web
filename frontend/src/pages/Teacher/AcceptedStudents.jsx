@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { InputText } from "primereact/inputtext";
 import style from "../../styles/teacher/AcceptedStudents.module.css";
 import { Link } from "react-router-dom";
 import Modal from "../../components/General/Modal";
@@ -11,7 +9,11 @@ import Button from "../../components/General/Button";
 import axios from "axios";
 import { UserContext } from "../../context/UserContext";
 import { useContext } from "react";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronRight,
+  faChevronLeft
+} from "@fortawesome/free-solid-svg-icons";
 function AcceptedStudents() {
   const [customers, setCustomers] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -35,7 +37,10 @@ function AcceptedStudents() {
         setTotalRec(1)
       }
       else{
+
         if(response.data.requests.count%8!=0){
+          console.log(Math.round(response.data.requests.count/8)+1)
+
           setTotalRec(Math.round(response.data.requests.count/8)+1)
         }
         else{
@@ -44,12 +49,7 @@ function AcceptedStudents() {
       }
     }
     setCustomers(req)
-    if(response.data.requests.count<=8){
-      setTotalRec(1)
-    }
-    else{
-        setTotalRec(Math.round(response.data.requests.count/8))
-    }
+
     setCustomers(req)
   }).catch(err=>{
     console.log(err)
@@ -60,14 +60,24 @@ function AcceptedStudents() {
     },[page])
   
 
+    const onPageChange = (e,type_event) => {
+      if(type_event==="next"){
+        if(page!=totalRec/8){
+          setPage(page+1)
+        }
+      }
+      else{
+        if(page!=1){
+          setPage(page-1)
+        }
+      }
+    };
 
   const [showModal, setShowModal] = useState(false);
 
   const onRowSelect = (event) => {
-    if(event.data.stare_cerere === "accepted"){
       setSelectedRow(event.data);
-      setShowModal(true);
-    }
+      setShowModal(true);  
   };
 
   const onHide = () => {
@@ -87,13 +97,11 @@ function AcceptedStudents() {
           rows={5}
           onRowSelect={onRowSelect}
           selection={selectedCustomer}
-          onSelectionChange={(e) => {
-            setSelectedCustomer(e.value);
+          onSelectionChange={(e) =>{ 
+            setSelectedCustomer(e.value)
           }}
           selectionMode="single"
-          dataKey="id"
-          stateStorage="session"
-          stateKey="dt-state-demo-local"
+          dataKey="id_request"
           emptyMessage="No students found."
           tableStyle={{ minWidth: "50rem" }}
         >
@@ -116,7 +124,11 @@ function AcceptedStudents() {
             style={{ width: "25%" }}
           ></Column>
         </DataTable>
-
+        <div className={style.paginationZone}>
+        <button className={style.btnPagination} onClick={(e)=>onPageChange(e,"prev")}><FontAwesomeIcon icon={faChevronLeft} /></button>  
+        <span>Page {page} from {totalRec}</span>
+        <button className={style.btnPagination} onClick={(e)=>onPageChange(e,"next")}><FontAwesomeIcon icon={faChevronRight} /></button>
+      </div>
         
       </div>{" "}
       <Modal
