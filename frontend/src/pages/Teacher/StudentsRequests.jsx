@@ -56,12 +56,7 @@ function StudentsRequests() {
       setTotalRec(1)
     }
     else{
-      if(response.data.requests.count%8!=0){
-        setTotalRec(Math.round(response.data.requests.count/8)+1)
-      }
-      else{
         setTotalRec(Math.round(response.data.requests.count/8))
-      }
     }
     setCustomers(req)
   }).catch(err=>{

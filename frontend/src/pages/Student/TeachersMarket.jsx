@@ -31,16 +31,11 @@ const loadData =async () =>{
           await 
           axios.get(`http://localhost:9000/users/getAllTeachers/${teacher_query}?&take=8&skip=${page}`).then((response)=>{
           let teachers= response.data.requests.rows
-          if(response.data.requests.count<=8){
-            setTotalRec(1)
+          if(response.data.requests.count%8!=0){
+            setTotalRec(Math.round(response.data.requests.count/8)+1)
           }
           else{
-            if(response.data.requests.count%8!=0){
-              setTotalRec(Math.round(response.data.requests.count/8)+1)
-            }
-            else{
-              setTotalRec(Math.round(response.data.requests.count/8))
-            }
+            setTotalRec(Math.round(response.data.requests.count/8))
           }
           setTeachers(teachers)
         }).catch(err=>{
