@@ -137,7 +137,6 @@ function Phase1() {
             field="nume"
             header="Name"
             sortable
-            filterPlaceholder="Search"
             style={{ width: "25%" }}
           ></Column>
 
@@ -147,7 +146,6 @@ function Phase1() {
             header="Status"
             body={statusBodyTemplate}
             sortable
-            filterMenuStyle={{ width: "14rem" }}
             style={{ width: "25%" }}
           ></Column>
         </DataTable>
@@ -163,7 +161,7 @@ function Phase1() {
         header={selectedRow ? selectedRow.nume : ""}
         content=
         {
-          selectedRow.status === "rejected"?<p>{selectedRow.feedback}</p>:<p>Nu exista feedback acordat cererii</p>
+          selectedRow?selectedRow.status==="rejected"?<p>{selectedRow.feedback}</p>:<p>Nu exista feedback acordat cererii</p>:<p>eroare</p>
         } 
       />      </div>
     </div>
