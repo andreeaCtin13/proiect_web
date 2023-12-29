@@ -26,7 +26,6 @@ function Phase1() {
       const teacher_query = "teacher_query?"
       
       const data = await axios.get(`http://localhost:9000/users/getAllTeachersRequests/${globalUser.idUser}/${teacher_query}&take=8&skip=${page}`)
-      let req=[]
       if(data.data.requests.count<=8){
         setTotalRec(1)
       }
@@ -38,12 +37,14 @@ function Phase1() {
           setTotalRec(Math.round(data.data.requests.count/8))
         }
       }
+      let req=[]
+
       for(let obj in data.data.requests.rows)
       {  
         console.log("obj", obj)
-        let {id_request, status, studentRequests,tematica } =data.data.requests.rows[obj]
-        console.log(studentRequests,"mai sus")
-        let {nume, mail} = studentRequests
+        let {id_request, status, teacherRequests,tematica } =data.data.requests.rows[obj]
+        console.log(teacherRequests,"mai sus")
+        let {nume, mail} = teacherRequests
         req.push({
           id_request, nume, mail, status,tematica
         })
