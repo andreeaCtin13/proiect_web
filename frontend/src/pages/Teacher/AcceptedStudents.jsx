@@ -8,78 +8,59 @@ import style from "../../styles/teacher/AcceptedStudents.module.css";
 import { Link } from "react-router-dom";
 import Modal from "../../components/General/Modal";
 import Button from "../../components/General/Button";
+import axios from "axios";
+import { UserContext } from "../../context/UserContext";
+import { useContext } from "react";
+
 function AcceptedStudents() {
   const [customers, setCustomers] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null); 
+  const [page,setPage] = useState(1)
+  const [totalRec, setTotalRec]=useState(1)
+  const { globalUser, setGlobalUser } = useContext(UserContext);
+  const loadData = async()=>{
+    const students_query = "student_query?status=accepted"
+    await 
+    axios.get(`http://localhost:9000/users/getAllStudentsRequest/${globalUser.idUser}/${students_query}&take=8&skip=${page}`).then((response)=>{
+    let students= response.data.requests.rows
+    let req =[] 
+    for(let i= 0;i<students.length;i++){
+      let stud = {...students[i].studentRequests}
+      let {status, tematica, id_request}=students[i]
+      req.push({
+        id_request, status, tematica, ...stud
+      })
+      if(response.data.requests.count<=8){
+        setTotalRec(1)
+      }
+      else{
+        if(response.data.requests.count%8!=0){
+          setTotalRec(Math.round(response.data.requests.count/8)+1)
+        }
+        else{
+          setTotalRec(Math.round(response.data.requests.count/8))
+        }
+      }
+    }
+    setCustomers(req)
+    if(response.data.requests.count<=8){
+      setTotalRec(1)
+    }
+    else{
+        setTotalRec(Math.round(response.data.requests.count/8))
+    }
+    setCustomers(req)
+  }).catch(err=>{
+    console.log(err)
+  })     
+  }
+    useEffect(()=>{
+     loadData()
+    },[page])
+  
 
-  useEffect(() => {
-    setCustomers([
-      {
-        id: 1000,
-        name: "Andreea Constantin",
-        mail:"andreea@gmail.com",
-        titlu_disertatie: "hahahah",
-        stare_cerere:"accepted"
-      },
-      {
-        id: 2000,
-        name: "Elena Caravan",
-        mail:"elena@gmail.com",
-        titlu_disertatie: "hahahah2",
-        stare_cerere:"final"
-      },
-      {
-        id: 88,
-        name: "Valeriu Carasel",
-        mail:"valeriu@gmail.com",
-        titlu_disertatie: "hahahah3",
-        stare_cerere:"accepted"
-      },
-    ]);
-  }, []);
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    name: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-    },
-    "country.name": {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-    },
-    representative: { value: null, matchMode: FilterMatchMode.IN },
-    status: {
-      operator: FilterOperator.OR,
-      constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-    },
-  });
 
-
-  const onGlobalFilterChange = (event) => {
-    const value = event.target.value;
-    let _filters = { ...filters };
-    _filters["global"].value = value;
-    setFilters(_filters);
-  };
-
-  const renderHeader = () => {
-    const value = filters["global"] ? filters["global"].value : "";
-
-    return (
-      <span>
-        <i />
-        <InputText
-          type="search"
-          value={value || ""}
-          onChange={(e) => onGlobalFilterChange(e)}
-          placeholder="Global Search"
-        />
-      </span>
-    );
-  };
-
-  const header = renderHeader();
   const [showModal, setShowModal] = useState(false);
 
   const onRowSelect = (event) => {
@@ -103,12 +84,8 @@ function AcceptedStudents() {
       <div className={style.tableContain}>
         <DataTable
           value={customers}
-          paginator
           rows={5}
-          header={header}
-          filters={filters}
           onRowSelect={onRowSelect}
-          onFilter={(e) => setFilters(e.filters)}
           selection={selectedCustomer}
           onSelectionChange={(e) => {
             setSelectedCustomer(e.value);
@@ -121,11 +98,9 @@ function AcceptedStudents() {
           tableStyle={{ minWidth: "50rem" }}
         >
           <Column
-            field="name"
+            field="nume"
             header="Name"
             sortable
-            filter
-            filterPlaceholder="Search"
             style={{ width: "25%" }}
           ></Column>
           <Column
@@ -135,7 +110,7 @@ function AcceptedStudents() {
             style={{ width: "25%" }}
           ></Column>
           <Column
-            field="titlu_disertatie"
+            field="tematica"
             header="Titlu Disertatie"
             sortable
             style={{ width: "25%" }}
