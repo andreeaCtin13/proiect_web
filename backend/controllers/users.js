@@ -6,7 +6,7 @@ const saltRounds = 10;
 const { Sequelize } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const env = require("dotenv");
-const { LikeOp, EqOp, NotEqOp } = require("./operators");
+const { LikeOp, EqOp, NotEqOp, OrOp } = require("./operators");
 
 env.config();
 const generateAccessToken = (user) => {
@@ -121,7 +121,13 @@ const controller = {
 
     let whereClause = {};
     let whereIncludeClause = {};
-    if (filter.status) whereClause.status = { [EqOp]: filter.status };
+    if (filter.status) {
+      if (filter.status === "accepted") {
+        whereClause.status = { [OrOp]: ["accepted", "loading", "final"] };
+      } else {
+        whereClause.status = { [EqOp]: filter.status };
+      }
+    }
     if (filter.nume) whereIncludeClause.nume = { [LikeOp]: `%${filter.nume}` };
     await requestsModel
       .findAndCountAll({
@@ -137,6 +143,7 @@ const controller = {
         offset: parseInt(filter.skip - 1) * parseInt(filter.take),
       })
       .then((rezultat) => {
+        console.log(rezultat, "rezultat");
         return res.status(200).send({ requests: rezultat });
       })
       .catch((err) => {
