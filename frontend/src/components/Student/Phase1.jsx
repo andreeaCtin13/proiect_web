@@ -41,17 +41,13 @@ function Phase1() {
 
       for(let obj in data.data.requests.rows)
       {  
-        console.log("obj", obj)
-        let {id_request, status, teacherRequests,tematica } =data.data.requests.rows[obj]
-        console.log(teacherRequests,"mai sus")
+        let {id_request, status, feedback, teacherRequests,tematica } =data.data.requests.rows[obj]
         let {nume, mail} = teacherRequests
         req.push({
-          id_request, nume, mail, status,tematica
+          id_request, nume, mail, status,tematica, feedback
         })
       }
       setRequests(req)
-      console.log(data.data.requests.rows)
-
     }
 
     console.log(requests)
@@ -115,7 +111,7 @@ function Phase1() {
     const onHide = () => {
       setShowModal(false);
     };
-  
+  console.log("selected row", selectedRow)
   return (
     <div>
        <h2 className={style.h2}>
@@ -145,6 +141,7 @@ function Phase1() {
             style={{ width: "25%" }}
           ></Column>
 
+
           <Column
             field="status"
             header="Status"
@@ -164,7 +161,10 @@ function Phase1() {
         visible={showModal}
         onHide={onHide}
         header={selectedRow ? selectedRow.nume : ""}
-        content={<p>ceva text evdem cand facem legatura cu backend ul</p>} 
+        content=
+        {
+          selectedRow.status === "rejected"?<p>{selectedRow.feedback}</p>:<p>Nu exista feedback acordat cererii</p>
+        } 
       />      </div>
     </div>
   )
