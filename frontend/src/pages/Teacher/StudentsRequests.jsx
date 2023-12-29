@@ -103,6 +103,15 @@ function StudentsRequests() {
       setShowModalRow(false);
       setDiclined(false)
     };
+    const acceptStudentUpdate = async(status_request, idReq )=>{
+      if(status_request==="accepted"){
+        let studentId = (customers.find(x=>x.id_request === idReq)).idUser
+        const updated_user = {id_profesor_asociat:globalUser.idUser}
+        await axios.put(`http://localhost:9000/users/updateUser/${studentId}`,updated_user).then(()=>{
+          console.log("yayayyyyy")
+        }).catch(err=>console.log(err))
+      }
+    }
 
     const updateRequestStatus = async (status_request,id)=>{
       let new_req = {status:status_request}
@@ -125,7 +134,9 @@ function StudentsRequests() {
           new_req = {...new_req, feedback:feedback}
         }
       }
-      await axios.put(`http://localhost:9000/requests/updateRequest/${id}`,new_req)
+      await axios.put(`http://localhost:9000/requests/updateRequest/${id}`,new_req).then((resp)=>{
+       acceptStudentUpdate(status_request, resp.data.id_request)
+      })
       onHideModalRow()
       setCustomers(customers.filter((x)=>x.id_request!==id))
     }

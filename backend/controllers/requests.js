@@ -97,8 +97,9 @@ const controller = {
       if (request) {
         await requestModel
           .update(new_request, { where: { id_request } })
-          .then(() => {
-            return res.status(200).send(new_request);
+          .then(async () => {
+            const req = await requestModel.findByPk(id_request);
+            return res.status(200).send(req);
           })
           .catch((err) => {
             console.log(err);

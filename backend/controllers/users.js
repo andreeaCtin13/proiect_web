@@ -80,33 +80,26 @@ const controller = {
   updateUserById: async (req, res) => {
     let newUser = req.body;
     let id_user = req.params.id_user;
+    console.log(id_user, "id user");
 
-    await usersModel
-      .findByPk(id_user)
-      .then(async (user) => {
-        if (!user) {
-          return res
-            .status(400)
-            .send({ message: "nu ai introdus un id pentru profesor valid" });
-        }
-      })
-      .catch((err) => {
-        res.status(500).send({ message: "server error", err: err });
-      });
+    const user = await usersModel.findByPk(id_user);
 
-    await usersModel
-      .update(newUser, {
-        where: {
-          idUser: id_user,
-        },
-        returning: true,
-      })
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((err) => {
-        return res.status(500), send({ err: err });
-      });
+    if (user) {
+      await usersModel
+        .update(newUser, {
+          where: {
+            idUser: id_user,
+          },
+        })
+        .then((result) => {
+          return res.status(200).json(result);
+        })
+        .catch((err) => {
+          return res.status(500).json({ message: "server error", err: err });
+        });
+    } else {
+      return res.status(500).json({ message: "nu ai introdus un user valid" });
+    }
   },
 
   getUserByID: async (req, res) => {
