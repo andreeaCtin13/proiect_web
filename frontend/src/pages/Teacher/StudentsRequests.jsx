@@ -11,6 +11,11 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import { UserContext } from '../../context/UserContext';
 import { toast, ToastContainer } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronRight,
+  faChevronLeft
+} from "@fortawesome/free-solid-svg-icons";
 import "react-toastify/dist/ReactToastify.css";
 
 function StudentsRequests() {
@@ -34,7 +39,17 @@ function StudentsRequests() {
       req.push({
         id_request, status, tematica, ...stud
       })
-      console.log(req)
+      if(response.data.requests.count<=8){
+        setTotalRec(1)
+      }
+      else{
+        if(response.data.requests.count%8!=0){
+          setTotalRec(Math.round(response.data.requests.count/8)+1)
+        }
+        else{
+          setTotalRec(Math.round(response.data.requests.count/8))
+        }
+      }
     }
     setCustomers(req)
     if(response.data.requests.count<=8){
@@ -53,12 +68,23 @@ function StudentsRequests() {
     console.log(err)
   })     
   }
-  const no_of_students = 9; 
     useEffect(()=>{
      loadData()
-    },[])
+    },[page])
 
-  
+   
+    const onPageChange = (e,type_event) => {
+      if(type_event==="next"){
+        if(page!=totalRec){
+          setPage(page+1)
+        }
+      }
+      else{
+        if(page!=1){
+          setPage(page-1)
+        }
+      }
+    };
     const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   
@@ -158,7 +184,11 @@ function StudentsRequests() {
               ></Column>
 
             </DataTable>
-
+            <div className={style.paginationZone}>
+        <button className={style.btnPagination} onClick={(e)=>onPageChange(e,"prev")}><FontAwesomeIcon icon={faChevronLeft} /></button>  
+        <span>Page {page} from {totalRec}</span>
+        <button className={style.btnPagination} onClick={(e)=>onPageChange(e,"next")}><FontAwesomeIcon icon={faChevronRight} /></button>
+      </div>
             <Modal
             visible={showModalRow}
             onHide={onHideModalRow}
