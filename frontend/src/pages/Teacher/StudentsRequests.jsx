@@ -10,6 +10,8 @@ import Button from '../../components/General/Button';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { UserContext } from '../../context/UserContext';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function StudentsRequests() {
   const [customers, setCustomers] = useState(null);
@@ -18,6 +20,7 @@ function StudentsRequests() {
   const [page,setPage] = useState(1)
   const [totalRec, setTotalRec]=useState(1)
   const { globalUser, setGlobalUser } = useContext(UserContext);
+  const [feedback, setFeedback] = useState("")
 
   const loadData = async()=>{
     const students_query = "student_query?status=pending"
@@ -54,50 +57,11 @@ function StudentsRequests() {
     useEffect(()=>{
      loadData()
     },[])
-    const [filters, setFilters] = useState({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      name: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      "country.name": {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      representative: { value: null, matchMode: FilterMatchMode.IN },
-      status: {
-        operator: FilterOperator.OR,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-      },
-    });
+
   
     const [selectedCustomer, setSelectedCustomer] = useState(null);
-   
-    const onGlobalFilterChange = (event) => {
-      const value = event.target.value;
-      let _filters = { ...filters };
-      _filters["global"].value = value;
-      setFilters(_filters);
-    };
-  
-    const renderHeader = () => {
-      const value = filters["global"] ? filters["global"].value : "";
-  
 
-      return (
-        <span>
-          <i  />
-          <InputText
-            type="search"
-            value={value || ""}
-            onChange={(e) => onGlobalFilterChange(e)}
-            placeholder="Global Search"
-          />
-        </span>
-      );
-    };
   
-    const header = renderHeader();
     const [showModal, setShowModal] = useState(false);
     const [showModalRow, setShowModalRow] = useState(false);
 
@@ -113,10 +77,37 @@ function StudentsRequests() {
     const onHide = () => {
       setShowModal(false);
     };
+
     const onHideModalRow = () => {
       setShowModalRow(false);
       setDiclined(false)
     };
+
+    const updateRequestStatus = async (status_request,id)=>{
+      let new_req = {status:status_request}
+
+      if(status_request==="rejected"){
+        if(feedback===""){
+          toast.error("You have to write your feedback before rejecting the request", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          return
+        }
+        else{
+          new_req = {...new_req, feedback:feedback}
+        }
+      }
+      await axios.put(`http://localhost:9000/requests/updateRequest/${id}`,new_req)
+      onHideModalRow()
+      setCustomers(customers.filter((x)=>x.id_request!==id))
+    }
   
   return (
     <div className={style.mainContainer}>
@@ -124,7 +115,7 @@ function StudentsRequests() {
         Students Requests
       </h2>
       <div>
-        <h4>No. available: {no_of_students} </h4>
+        <h4>No. available: {globalUser.nr_maxim_studenti} </h4>
       </div>
       <div className={style.buttonZone}>
         <Link className={style.link} to={"/teacher/sessions"}>
@@ -151,6 +142,7 @@ function StudentsRequests() {
               emptyMessage="No students found."
               tableStyle={{ minWidth: "50rem" }}
             >
+
               <Column
                 field="nume"
                 header="Name"
@@ -164,6 +156,7 @@ function StudentsRequests() {
                 sortable
                 style={{ width: "25%" }}
               ></Column>
+
             </DataTable>
 
             <Modal
@@ -173,12 +166,17 @@ function StudentsRequests() {
             content={<div>
               {
                 declined === false ? <div className={style.contentModal}>
-                  <Button content={"Accept it"} className={style.btnAccept} onClick={onHideModalRow}></Button>
+                  <Button content={"Accept it"} className={style.btnAccept} onClick={()=>{
+                    updateRequestStatus("accepted", selectedRow.id_request, selectedRow.index)
+                    onHideModalRow()
+                  }}></Button>
                   <Button content={"Decline it"} className={style.btnDecline} onClick={()=>{setDiclined(true)}}></Button>
                 </div>:<div className={style.contentModal}>
-                <input type='text' className={style.feedbackInput} placeholder='Write  your feedback...'></input>
+                <input type='text' onChange={(e)=>setFeedback(e.target.value)} className={style.feedbackInput} placeholder='Write  your feedback...'></input>
                 <br />
-                <Button content={"Send it"}onClick={onHideModalRow} className={style.sendItButton}></Button>
+                <Button content={"Send it"}onClick={()=>{
+                  updateRequestStatus("rejected", selectedRow.id_request, selectedRow.index)
+                  }} className={style.sendItButton}></Button>
                 </div>
               }
             </div>}/>      
@@ -196,6 +194,18 @@ function StudentsRequests() {
               <Button content={"No"} className={style.btnLogoutNo} onClick={onHide}></Button>
               </div>
             </div>}/>  
+            <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   )
 }
