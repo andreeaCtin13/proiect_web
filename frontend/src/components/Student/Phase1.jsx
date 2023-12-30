@@ -50,7 +50,6 @@ function Phase1() {
       setRequests(req)
     }
 
-    console.log(requests)
 
     useEffect(()=>{
       loadData()
@@ -111,7 +110,6 @@ function Phase1() {
     const onHide = () => {
       setShowModal(false);
     };
-  console.log("selected row", selectedRow)
   return (
     <div>
        <h2 className={style.h2}>
@@ -122,7 +120,7 @@ function Phase1() {
          dataKey="id_request"
           value={requests}
           rows={8}
-          onRowSelect={onRowSelect}
+          onRowClick={onRowSelect}
           selection={selectedRequests}
           onSelectionChange={(e) =>{ 
             setSelectedRequests(e.value)

@@ -162,7 +162,7 @@ function StudentsRequests() {
             <DataTable
               value={customers}
               rows={5}
-              onRowSelect={onRowSelect}
+              onRowClick={onRowSelect}
               selection={selectedCustomer}
               onSelectionChange={(e) =>{ 
                 setSelectedCustomer(e.value)
