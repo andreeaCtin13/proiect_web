@@ -12,9 +12,8 @@ import { useContext } from "react";
 function CurrentStatusPage() {
   const { globalUser, setGlobalUser } = useContext(UserContext);
 
-  const profesor = null;
   const statusList = ["pending", "accepted","loading", "final", "refused"]
-  const status = statusList[3]
+  const status = statusList[1]
   console.log("global user", globalUser)
   return (
     <div className={style.mainContainer}>

@@ -16,7 +16,7 @@ const upload = multer({ storage });
 router.post("/addRequest", requestsController.addRequest);
 router.put("/updateRequest/:id", requestsController.updateRequest);
 router.post(
-  "/uploadFile",
+  "/uploadFile/:id",
   upload.single("file"),
   requestsController.uploadFile
 );
