@@ -1,6 +1,8 @@
 const requestModel = require("../models").requests;
 const usersModel = require("../models").users;
 const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -119,6 +121,7 @@ const controller = {
       return res.status(400).json({ message: "you should introduce a file" });
     }
     const id_request = req.params.id;
+
     const new_request = {
       pdf: req.file.path,
     };
@@ -148,10 +151,26 @@ const controller = {
   },
   getFilePath: async (req, res) => {
     const id_request = req.params.id;
+    console.log(id_request);
     try {
       const request = await requestModel.findByPk(Number(id_request));
-      return res.status(200).send({ path: request.pdf });
+      if (!request) {
+        return res.status(400).json({ error: "File Not Found" });
+      }
+      console.log(request.pdf);
+
+      // const filePath = request.pdf;
+      // const file = fs.createReadStream(filePath);
+      // const filename = new Date().toISOString();
+      // console.log(filename, file);
+      // res.setHeader(
+      //   "Content-Disposition",
+      //   'attachment: filename="' + filename + '"'
+      // );
+      // file.pipe(res);
+      return res.status(200).send({ message: "success", path: request.pdf });
     } catch (err) {
+      console.error("Error downloading file:", err);
       return res.status(500).send({ message: "Server ERROR", err: err });
     }
   },

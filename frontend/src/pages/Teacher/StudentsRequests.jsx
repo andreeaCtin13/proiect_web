@@ -113,6 +113,17 @@ function StudentsRequests() {
       }
     }
 
+    const updateNoDisponibile = async() =>{
+      const updated_user = {nr_maxim_studenti:globalUser.nr_maxim_studenti-1}
+      await axios.put(`http://localhost:9000/users/updateUser/${globalUser.idUser}`,updated_user).then((result)=>{
+        console.log("yayayyyyy")
+        setGlobalUser({...globalUser, nr_maxim_studenti:globalUser.nr_maxim_studenti-1})
+      }).catch(err=>console.log(err))
+      console.log(globalUser)
+
+    }
+
+    console.log(globalUser)
     const updateRequestStatus = async (status_request,id)=>{
       let new_req = {status:status_request}
 
@@ -204,6 +215,7 @@ function StudentsRequests() {
                 declined === false ? <div className={style.contentModal}>
                   <Button content={"Accept it"} className={style.btnAccept} onClick={()=>{
                     updateRequestStatus("accepted", selectedRow.id_request, selectedRow.index)
+                    updateNoDisponibile()
                     onHideModalRow()
                   }}></Button>
                   <Button content={"Decline it"} className={style.btnDecline} onClick={()=>{setDiclined(true)}}></Button>

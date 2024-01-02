@@ -86,6 +86,28 @@ function AcceptedStudents() {
     setShowModal(false);
   };
 
+  const downloadFile = async(e) =>{
+    e.preventDefault()
+
+    try{
+      const response = await axios.get("http://localhost:9000/requests/getFilePath/1")
+      
+      const url = response.data.path;
+      console.log(url)
+      let url_nou = url.split(`\\`).join("/")
+
+      const full_path = "../../../../backend/"+url_nou
+      console.log(full_path)
+      const a = document.createElement('a');
+      a.href = full_path;
+      a.download = 'downloaded-file';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error downloading file:', error.message);
+    }
+  }
 
   return (
     <div className={style.mainContainer}>
@@ -145,7 +167,7 @@ function AcceptedStudents() {
             header={selectedRow ? selectedRow.name  : ""}
             content={<div className={style.modalContainer}>
               <div>
-                <Button content={"Download file"} className={style.btnDownload}></Button>
+                <Button content={"Download file"} className={style.btnDownload} onClick={(e)=>downloadFile(e)}></Button>
 
               </div>
               <div>
@@ -153,7 +175,6 @@ function AcceptedStudents() {
                 <br />
                 <input type="file" name="file"/>
               </div>
-              
             </div>}/>
     </div>
   );

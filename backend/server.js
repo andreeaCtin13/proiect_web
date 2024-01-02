@@ -16,6 +16,8 @@ app.use(
     optionsSuccessStatus: 200,
   })
 );
+
+app.use(express.static("public"));
 app.use(express.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
