@@ -5,7 +5,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import style from "../../styles/CustomSidebar.module.css"
-import logo from "../../images/login-register-image.jpg"
+import logo from "../../images/logo.png"
 import {Link} from "react-router-dom";
 import Modal from '../General/Modal';
 import Button from '../General/Button';

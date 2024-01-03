@@ -16,7 +16,7 @@
   align-items: center;
   width: fit-content;
   gap: 2rem;
-  margin: 0;
+  margin: 2rem;
   justify-content: center;
   color: var(--var--dark--brown);
   font-size: 2rem;
@@ -29,8 +29,9 @@
 }
 
 .logo {
-  width: 5rem;
-  height: 5rem;
+  width: 20rem;
+  height: 17rem;
+  margin: 2rem 0 -7rem 0;
 }
 
 .h1 {
@@ -98,5 +99,6 @@
 }
 
 .description {
-  width: 30rem;
+  width: 35rem;
+  margin-top: -7rem;
 }

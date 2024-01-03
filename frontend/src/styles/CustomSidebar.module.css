@@ -19,6 +19,7 @@
 
 .sidebarContainer {
   position: fixed;
+  width: fit-content;
   left: 0;
   top: 0;
   bottom: 0;
@@ -31,8 +32,8 @@
 }
 
 .logo {
-  width: 15rem;
-  height: 15rem;
+  width: 14rem;
+  height: 12rem;
   border-radius: 100%;
 }
 

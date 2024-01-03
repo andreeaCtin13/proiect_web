@@ -2,12 +2,13 @@ import React from "react";
 import style from "../styles/LandingPage.module.css";
 import Button from "../components/General/Button";
 import { Link } from "react-router-dom";
+import Logo from "../images/logo.png"
 function LandingPage() {
   return (
     <div className={style.mainContainer}>
       <img
         className={style.logo}
-        src="https://th.bing.com/th/id/OIP.nHB3f94fM0KpmCejJFRc3QHaH2?pid=ImgDet&rs=1"
+        src={Logo}
         alt="logo"
       />
       <div className={style.mainIntroSection}>
