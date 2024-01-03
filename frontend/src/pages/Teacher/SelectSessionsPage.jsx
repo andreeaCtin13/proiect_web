@@ -5,11 +5,12 @@ import Button from "../../components/General/Button";
 import { UserContext } from "../../context/UserContext";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import { useNavigate} from 'react-router-dom';
 import "react-toastify/dist/ReactToastify.css";
 function SelectSessionsPage() {
   const [teacherInfo, setTeacherInfo] = useState({});
   const { globalUser, setGlobalUser } = useContext(UserContext);
-
+  const navigate = useNavigate()
   console.log(globalUser);
 
   const checkAndSendDates = async () => {
@@ -70,6 +71,26 @@ function SelectSessionsPage() {
         progress: undefined,
         theme: "colored",
       });
+
+      let response_sessions=await axios.get(`http://localhost:9000/sessions/getAllSessions/${globalUser.idUser}`)
+      console.log(response_sessions)
+
+      let data_actuala = new Date()
+      let ok=false
+      for(let i=0;i<response_sessions.data.length; i++){
+        let data_inceput = new Date(response_sessions.data[i].data_inceput)
+        let data_final = new Date(response_sessions.data[i].data_final)
+        if(data_inceput<=data_actuala && data_final>=data_actuala){
+          ok=true 
+          break
+        }
+      }
+      if(ok===true){
+        navigate("/teacher/students-requests")
+      }
+      else{
+        navigate("/teacher/out-of-sessions")
+      }
     } catch (error) {
       if (error.response.data.message === "The sessions are overlapping") {
         toast.error("Sessions are overlapping", {

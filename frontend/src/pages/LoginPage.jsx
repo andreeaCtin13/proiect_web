@@ -33,18 +33,20 @@ function LoginPage() {
       onChangeAction: onChange,
     },
   ];
-  console.log(globalUser)
-  let ID=-1
-  let isProfesor = false
+  console.log(globalUser);
+  let ID = -1;
+  let isProfesor = false;
 
   const login = async (e) => {
     e.preventDefault();
     const data = await axios
       .post("http://localhost:9000/users/login", userInfo)
       .then((response) => {
-        setGlobalUser({...response.data.user})
-        ID = response.data.user.idUser
-        response.data.user.isProfesor? isProfesor=true:isProfesor=false
+        setGlobalUser({ ...response.data.user });
+        ID = response.data.user.idUser;
+        response.data.user.isProfesor
+          ? (isProfesor = true)
+          : (isProfesor = false);
         return response.data;
       })
       .catch((error) => {
@@ -61,9 +63,8 @@ function LoginPage() {
         progress: undefined,
         theme: "dark",
       });
-    }
-    else{
-      toast.success('🦄 You are logged in princess', {
+    } else {
+      toast.success("🦄 You are logged in princess", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -72,27 +73,46 @@ function LoginPage() {
         draggable: true,
         progress: undefined,
         theme: "colored",
-        });
-        console.log(globalUser)
+      });
+      console.log(globalUser);
 
-        if(isProfesor){
-          const sessions_exist = await axios.get(`http://localhost:9000/sessions/getAllSessions/${ID}`).then((rez)=>{
-            console.log(rez.data)
-            if(rez.data.length=== 0){
-              console.log("ajung aici")
-              navigate("/teacher/select-sessions")
+      if (isProfesor) {
+        const sessions_exist = await axios
+          .get(`http://localhost:9000/sessions/getAllSessions/${ID}`)
+          .then((rez) => {
+            console.log(rez.data);
+            if (rez.data.length === 0) {
+              console.log("ajung aici");
+              navigate("/teacher/select-sessions");
+            } else {
+              let data_actuala = new Date();
+              let ok = false;
+              for (let i = 0; i < rez.data.length; i++) {
+                let data_inceput = new Date(
+                  rez.data[i].data_inceput
+                );
+                let data_final = new Date(rez.data[i].data_final);
+                if (
+                  data_inceput <= data_actuala &&
+                  data_final >= data_actuala
+                ) {
+                  ok = true;
+                  break;
+                }
+              }
+              if (ok === true) {
+                navigate("/teacher/students-requests");
+              } else {
+                navigate("/teacher/out-of-sessions");
+              }
             }
-            else{
-              navigate("/teacher/students-requests")
-            }
-          }).catch((err)=>{
-            console.log(err)
           })
-        }
-        else{
-          navigate("/user/teachers")
-        }
-      
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        navigate("/user/teachers");
+      }
     }
   };
   return (

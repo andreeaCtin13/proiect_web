@@ -37,6 +37,12 @@ const loadData =async () =>{
           else{
             setTotalRec(Math.round(response.data.requests.count/8))
           }
+
+          for(let i=0;i<teachers.length;i++){
+            // let sessions = axios.get(`http://localhost:9000/sessions/getAllSessions/${ID}`)
+
+          }
+
           setTeachers(teachers)
         }).catch(err=>{
           console.log(err)

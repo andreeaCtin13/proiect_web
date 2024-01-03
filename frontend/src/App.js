@@ -10,6 +10,8 @@ import AcceptedStudents from "./pages/Teacher/AcceptedStudents";
 import SelectSessionsPage from "./pages/Teacher/SelectSessionsPage";
 import SessionsView from "./pages/Teacher/SessionsView";
 import StudentsRequests from "./pages/Teacher/StudentsRequests";
+import NotInTheSession from "./pages/Teacher/NotInTheSession";
+
 import { useState } from "react";
 import { UserContext } from "./context/UserContext";
 
@@ -66,6 +68,10 @@ const router = createBrowserRouter([
       {
         path: "/teacher/students-requests",
         element: <StudentsRequests></StudentsRequests>,
+      },
+      {
+        path: "/teacher/out-of-sessions",
+        element: <NotInTheSession></NotInTheSession>,
       },
     ],
   },
