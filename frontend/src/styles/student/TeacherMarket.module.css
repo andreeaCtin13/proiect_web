@@ -11,6 +11,10 @@
   border-radius: 1rem;
 }
 
+.inactiveRow {
+  background-color: aqua !important;
+}
+
 .modalContent {
   display: flex;
   flex-direction: column;

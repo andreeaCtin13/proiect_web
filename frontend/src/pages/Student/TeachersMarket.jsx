@@ -29,7 +29,7 @@ function TeachersMarket() {
 const loadData =async () =>{
     const teacher_query = "teachers_query?"
           await 
-          axios.get(`http://localhost:9000/users/getAllTeachers/${teacher_query}?&take=8&skip=${page}`).then((response)=>{
+          axios.get(`http://localhost:9000/users/getAllTeachers/${teacher_query}?&take=8&skip=${page}`).then(async(response)=>{
           let teachers= response.data.requests.rows
           if(response.data.requests.count%8!=0){
             setTotalRec(Math.round(response.data.requests.count/8)+1)
@@ -37,12 +37,31 @@ const loadData =async () =>{
           else{
             setTotalRec(Math.round(response.data.requests.count/8))
           }
-
+          
           for(let i=0;i<teachers.length;i++){
-            // let sessions = axios.get(`http://localhost:9000/sessions/getAllSessions/${ID}`)
+            let sessions = await axios.get(`http://localhost:9000/sessions/getAllSessions/${teachers[i].idUser}`)
+            let data_actuala = new Date();
+            let ok = false;
+            for (let j = 0; j < sessions.data.length; j++) {
+              let data_inceput = new Date(
+                sessions.data[j].data_inceput
+              );
+              let data_final = new Date(sessions.data[j].data_final);
+              if (
+                data_inceput <= data_actuala &&
+                data_final >= data_actuala
+              ) {
+                ok = true;
+                break;
+              }
+            }
+            if (ok === true) {
+              teachers[i].isAvailable = "available"
+            } else {
+              teachers[i].isAvailable = "unavailable"
+            }
 
           }
-
           setTeachers(teachers)
         }).catch(err=>{
           console.log(err)
@@ -52,7 +71,14 @@ const loadData =async () =>{
     useEffect(()=>{
       loadData()  
     },[page])
-   
+
+    const isAvailable = (rowData) => {
+      console.log(rowData.isAvailable)
+      if(rowData.isAvailable==="available"){
+        return false
+      }
+      return true
+    }
   
     const onPageChange = (e,type_event) => {
       if(type_event==="next"){
@@ -70,9 +96,11 @@ const loadData =async () =>{
     const [showModal, setShowModal] = useState(false);
 
     const onRowSelect = (event) => {
-      setSelectedRow(event.data);
-      setIdRequest(event.data.idUser)
-      setShowModal(true);    
+      if(event.data.isAvailable==="available"){
+        setSelectedRow(event.data);
+        setIdRequest(event.data.idUser)
+        setShowModal(true);    
+      }
     };
   
     const onHide = () => {
@@ -80,7 +108,6 @@ const loadData =async () =>{
     };
 
     const sendRequest =async () =>{
-      console.log(titleRequest)
       if(titleRequest!==""){
         console.log("intru aici")
 
@@ -145,7 +172,6 @@ const loadData =async () =>{
         });
       } 
     }
-console.log(titleRequest)
   return (
     <div className={style.mainContainer}>
       <h1>Search for a teacher</h1>
@@ -153,6 +179,8 @@ console.log(titleRequest)
         <DataTable value={teachers}  filterDisplay="row" responsiveLayout="scroll" dataKey="idUser"
      rows={10} totalRecords={totalRec} 
      onRowClick={onRowSelect}
+     rowClassName = {(rowData)=>isAvailable(rowData)?"activeRow":"inactiveRow"}
+
         > 
           <Column
             field="nume"
@@ -172,6 +200,12 @@ console.log(titleRequest)
             sortable
             style={{ width: "25%" }}
           ></Column>
+           <Column
+            field="isAvailable"
+            header="Avaliability"
+            sortable
+            style={{ width: "25%" }}
+          ></Column>
         </DataTable>
       <div className={style.paginationZone}>
         <button className={style.btnPagination} onClick={(e)=>onPageChange(e,"prev")}><FontAwesomeIcon icon={faChevronLeft} /></button>  
@@ -188,17 +222,17 @@ console.log(titleRequest)
               <Button content={"Send request"} className={style.btnSendRequest} onClick={sendRequest}></Button>
             </div>}/>  
         <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
     </div>
     
   )
