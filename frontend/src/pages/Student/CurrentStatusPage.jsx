@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import style from "../../styles/student/CurrentStatusPage.module.css";
 import Phase1 from "../../components/Student/Phase1";
 import Phase2 from "../../components/Student/Phase2";
@@ -11,23 +11,35 @@ import axios from "axios"
 function CurrentStatusPage() {
   const { globalUser, setGlobalUser } = useContext(UserContext);
 
-  const statusList = ["pending", "accepted","loading", "final", "refused"]
-  const status = statusList[1]
+  const [status, setStatus] = useState("pending")
+  const [reqId,setReqId] = useState()
   console.log("global user", globalUser)
+
+
+  const GetReq = async() => {
+    const req = await axios.get(`http://localhost:9000/requests/findAcceptedRequestOfAStudent/${globalUser.idUser}`)
+    setStatus(req.data.status)
+    setReqId(req.data.id_request)
+  }
 
   const UpdateUser = async() => {
     const userUpdated = await axios.get(`http://localhost:9000/users/getUserByID/${globalUser.idUser}`)
     setGlobalUser(userUpdated)
+    if(userUpdated.id_profesor_asociat !==null){
+      GetReq()
+    }
   }
   console.log(globalUser)
   useEffect(()=>{
     UpdateUser()
   },[])
 
+
+
   return (
     <div className={style.mainContainer}>
       <h1 className={style.h1}>Your current status</h1>
-      {globalUser.id_profesor_asociat===null?<Phase1></Phase1>:(status==="accepted"?<Phase2></Phase2>:(status==="loading"? <Phase3></Phase3>:<Phase4></Phase4>))}
+      {globalUser.id_profesor_asociat===null?<Phase1></Phase1>:(status==="accepted"?<Phase2 reqId={reqId} setReqId={setReqId}></Phase2>:(status==="loading"? <Phase3></Phase3>:<Phase4></Phase4>))}
     </div>
   );
 }

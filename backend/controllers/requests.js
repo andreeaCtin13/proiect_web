@@ -189,6 +189,29 @@ const controller = {
         res.status(500).send({ message: "server error", err: err });
       });
   },
+
+  findAcceptedRequestOfAStudent: async (req, res) => {
+    const id = req.params.id_student;
+    await requestModel
+      .findOne({
+        where: {
+          studentId: id,
+          status: {
+            [OrOp]: ["accepted", "loading", "final"],
+          },
+        },
+      })
+      .then((rez) => {
+        res.status(200).json(rez);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({
+          message: "uf eroare la findAcceptedRequestsOfAStudent",
+          err: err,
+        });
+      });
+  },
 };
 
 module.exports = controller;

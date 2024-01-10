@@ -25,4 +25,9 @@ router.get(
   "/getAllAcceptedRequestsOfATeacher/:id_teacher/teacher_query",
   requestsController.getAllAcceptedRequestsOfATeacher
 );
+
+router.get(
+  "/findAcceptedRequestOfAStudent/:id_student",
+  requestsController.findAcceptedRequestOfAStudent
+);
 module.exports = router;

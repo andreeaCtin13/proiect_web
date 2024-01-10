@@ -105,37 +105,46 @@ function AcceptedStudents() {
     }
   }
 
+  const updateRequestStatus = async() =>{
+    // await axios.put(`http://localhost:9000/requests/updateRequest/${id}`,new_req).then((resp)=>{
+    //   console.log("response update: ", resp)
+    //  acceptStudentUpdate(status_request, resp.data.studentId)
+    // }).catch(err=>{
+    //   console.log("eroare la update de request + eroare:", err)
+    // })
+  }
   const updateFile = async() =>{
-    const formData = new FormData();
-    formData.append("file", file);
-    await axios
-      .post("http://localhost:9000/requests//uploadFile/1", formData)
-      .then((res) => {
-        console.log(res.status)
-        toast.success("🦄 Your file has been uploaded", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      })
-      .catch((er) => {
-        toast.error("Sorry, but there was an error, please try again", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-        console.log(er)
-      });
+    // const formData = new FormData();
+    // formData.append("file", file);
+    // await axios
+    //   .post("http://localhost:9000/requests//uploadFile/1", formData)
+    //   .then((res) => {
+    //     console.log(res.status)
+    //     toast.success("🦄 Your file has been uploaded", {
+    //       position: "top-right",
+    //       autoClose: 3000,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //       theme: "colored",
+    //     });
+    //     updateRequestStatus()
+    //   })
+    //   .catch((er) => {
+    //     toast.error("Sorry, but there was an error, please try again", {
+    //       position: "top-right",
+    //       autoClose: 3000,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //       theme: "dark",
+    //     });
+    //     console.log(er)
+    //   });
   }
 
   return (

@@ -5,9 +5,10 @@ import axios from "axios"
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 
-function Phase2() {
+function Phase2({reqId, setReqId}) {
   const [file, setFile] = useState();
   const teacher="Toma Cristian";
+  console.log(reqId)
   const sendFile = async() =>{
     const formData = new FormData();
     formData.append("file", file);
