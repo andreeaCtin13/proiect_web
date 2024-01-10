@@ -14,6 +14,8 @@ import {
   faChevronRight,
   faChevronLeft
 } from "@fortawesome/free-solid-svg-icons";
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 
 function AcceptedStudents() {
   const [customers, setCustomers] = useState(null);
@@ -22,6 +24,7 @@ function AcceptedStudents() {
   const [page,setPage] = useState(1)
   const [totalRec, setTotalRec]=useState(1)
   const { globalUser, setGlobalUser } = useContext(UserContext);
+  const [file, setFile] = useState();
 
   const loadData = async()=>{
     const students_query = "student_query?status=accepted"
@@ -102,6 +105,39 @@ function AcceptedStudents() {
     }
   }
 
+  const updateFile = async() =>{
+    const formData = new FormData();
+    formData.append("file", file);
+    await axios
+      .post("http://localhost:9000/requests//uploadFile/1", formData)
+      .then((res) => {
+        console.log(res.status)
+        toast.success("🦄 Your file has been uploaded", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      })
+      .catch((er) => {
+        toast.error("Sorry, but there was an error, please try again", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        console.log(er)
+      });
+  }
+
   return (
     <div className={style.mainContainer}>
       <h1>Accepted Requests</h1>
@@ -154,9 +190,23 @@ function AcceptedStudents() {
               <div>
                 Upload the file signed
                 <br />
-                <input type="file" name="file"/>
+                <input type="file" name="file"  onChange={(e) => setFile(e.target.files[0])}/>
+                <button onClick={updateFile}>Send file</button>
               </div>
             </div>}/>
+
+            <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }

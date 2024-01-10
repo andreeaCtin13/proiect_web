@@ -108,11 +108,10 @@ function StudentsRequests() {
       setShowModalRow(false);
       setDiclined(false)
     };
-    const acceptStudentUpdate = async(status_request, idReq )=>{
+    const acceptStudentUpdate = async(status_request, idStud )=>{
       if(status_request==="accepted"){
-        let studentId = (customers.find(x=>x.id_request === idReq)).idUser
         const updated_user = {id_profesor_asociat:globalUser.idUser}
-        await axios.put(`http://localhost:9000/users/updateUser/${studentId}`,updated_user).then(()=>{
+        await axios.put(`http://localhost:9000/users/updateUser/${idStud}`,updated_user).then(()=>{
           console.log("yayayyyyy")
         }).catch(err=>console.log(err))
       }
@@ -142,14 +141,17 @@ function StudentsRequests() {
             progress: undefined,
             theme: "dark",
           });
-          return
         }
         else{
           new_req = {...new_req, feedback:feedback}
         }
+        return
       }
       await axios.put(`http://localhost:9000/requests/updateRequest/${id}`,new_req).then((resp)=>{
-       acceptStudentUpdate(status_request, resp.data.id_request)
+        console.log("response update: ", resp)
+       acceptStudentUpdate(status_request, resp.data.studentId)
+      }).catch(err=>{
+        console.log("eroare la update de request + eroare:", err)
       })
       onHideModalRow()
       setCustomers(customers.filter((x)=>x.id_request!==id))
@@ -213,7 +215,7 @@ function StudentsRequests() {
               {
                 declined === false ? <div className={style.contentModal}>
                   <Button content={"Accept it"} className={style.btnAccept} onClick={()=>{
-                    updateRequestStatus("accepted", selectedRow.id_request, selectedRow.index)
+                    updateRequestStatus("accepted", selectedRow.id_request)
                     updateNoDisponibile()
                     onHideModalRow()
                   }}></Button>
