@@ -120,7 +120,6 @@ const controller = {
     if (!filter.skip) filter.skip = 1;
 
     let whereClause = {};
-    let whereIncludeClause = {};
     if (filter.status) {
       if (filter.status === "accepted") {
         whereClause.status = { [OrOp]: ["accepted", "loading", "final"] };
@@ -128,26 +127,16 @@ const controller = {
         whereClause.status = { [EqOp]: filter.status };
       }
     }
-    if (filter.nume) whereIncludeClause.nume = { [LikeOp]: `%${filter.nume}` };
     await requestsModel
       .findAndCountAll({
-        include: [
-          {
-            model: usersModel,
-            as: "studentRequests",
-            where: whereIncludeClause,
-          },
-        ],
-        where: { ...whereClause, teacherId: id_profesor },
+        where: { teacherId: id_profesor, ...whereClause },
         limit: parseInt(filter.take),
         offset: parseInt(filter.skip - 1) * parseInt(filter.take),
       })
       .then((rezultat) => {
-        console.log(rezultat, "rezultat");
         return res.status(200).send({ requests: rezultat });
       })
       .catch((err) => {
-        console.log(err);
         return res.status(500).send({ message: "server error", err: err });
       });
   },

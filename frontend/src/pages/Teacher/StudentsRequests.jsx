@@ -32,12 +32,13 @@ function StudentsRequests() {
     await 
     axios.get(`http://localhost:9000/users/getAllStudentsRequest/${globalUser.idUser}/${students_query}&take=8&skip=${page}`).then((response)=>{
     let students= response.data.requests.rows
+    console.log("STUDENTS", students)
     let req =[] 
     for(let i= 0;i<students.length;i++){
       let stud = {...students[i].studentRequests}
-      let {status, tematica, id_request}=students[i]
+      let {status, tematica, id_request, studentId}=students[i]
       req.push({
-        id_request, status, tematica, ...stud
+        id_request, status, tematica, studentId,...stud
       })
       if(response.data.requests.count<=8){
         setTotalRec(1)
@@ -82,11 +83,15 @@ function StudentsRequests() {
     };
     const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-  
+    const [studentSelectat, setStudentSelectat] = useState({})
     const [showModal, setShowModal] = useState(false);
     const [showModalRow, setShowModalRow] = useState(false);
 
-    const onRowSelect = (event) => {
+    const onRowSelect = async (event) => {
+        console.log(event.data)
+      let student = await axios.get(`http://localhost:9000/users/getUserByID/${event.data.studentId}`)
+      console.log("student : ",student)
+      setStudentSelectat(student.data.user)
       setSelectedRow(event.data);
       setShowModalRow(true);
     };
@@ -116,14 +121,12 @@ function StudentsRequests() {
     const updateNoDisponibile = async() =>{
       const updated_user = {nr_maxim_studenti:globalUser.nr_maxim_studenti-1}
       await axios.put(`http://localhost:9000/users/updateUser/${globalUser.idUser}`,updated_user).then((result)=>{
-        console.log("yayayyyyy")
         setGlobalUser({...globalUser, nr_maxim_studenti:globalUser.nr_maxim_studenti-1})
       }).catch(err=>console.log(err))
-      console.log(globalUser)
+      
 
     }
 
-    console.log(globalUser)
     const updateRequestStatus = async (status_request,id)=>{
       let new_req = {status:status_request}
 
@@ -182,16 +185,9 @@ function StudentsRequests() {
               dataKey="id_request"
               stateStorage="session"
               stateKey="dt-state-demo-local"
-              emptyMessage="No students found."
+              emptyMessage="Nu s-a gasit nicio cerere."
               tableStyle={{ minWidth: "50rem" }}
             >
-
-              <Column
-                field="nume"
-                header="Name"
-                sortable
-                style={{ width: "25%" }}
-              ></Column>
 
               <Column
                 field="tematica"
@@ -209,8 +205,11 @@ function StudentsRequests() {
             <Modal
             visible={showModalRow}
             onHide={onHideModalRow}
-            header={selectedRow ? selectedRow.nume +" - request" : ""}
+            header={selectedRow ? selectedRow.tematica +" - request" : ""}
             content={<div>
+            <div className={style.introStudent}>
+              {studentSelectat.nume} - {studentSelectat.mail}
+            </div>
               {
                 declined === false ? <div className={style.contentModal}>
                   <Button content={"Accept it"} className={style.btnAccept} onClick={()=>{
