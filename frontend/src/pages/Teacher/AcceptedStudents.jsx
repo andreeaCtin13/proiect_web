@@ -14,6 +14,7 @@ import {
   faChevronRight,
   faChevronLeft
 } from "@fortawesome/free-solid-svg-icons";
+
 function AcceptedStudents() {
   const [customers, setCustomers] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -21,6 +22,7 @@ function AcceptedStudents() {
   const [page,setPage] = useState(1)
   const [totalRec, setTotalRec]=useState(1)
   const { globalUser, setGlobalUser } = useContext(UserContext);
+
   const loadData = async()=>{
     const students_query = "student_query?status=accepted"
     await 
@@ -91,19 +93,10 @@ function AcceptedStudents() {
 
     try{
       const response = await axios.get("http://localhost:9000/requests/getFilePath/1")
-      
-      const url = response.data.path;
-      console.log(url)
-      let url_nou = url.split(`\\`).join("/")
-
-      const full_path = "../../../../backend/"+url_nou
-      console.log(full_path)
-      const a = document.createElement('a');
-      a.href = full_path;
-      a.download = 'downloaded-file';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      console.log(response.data)
+      let name = response.data.split("\\")
+      console.log(name[2])
+      window.open(`http://localhost:9000/${name[2]}`, '_blank');
     } catch (error) {
       console.error('Error downloading file:', error.message);
     }
@@ -159,7 +152,7 @@ function AcceptedStudents() {
         <span>Page {page} from {totalRec}</span>
         <button className={style.btnPagination} onClick={(e)=>onPageChange(e,"next")}><FontAwesomeIcon icon={faChevronRight} /></button>
       </div>
-        
+
       </div>{" "}
       <Modal
             visible={showModal}

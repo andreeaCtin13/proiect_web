@@ -1,0 +1,15 @@
+{
+    "nume":"vlad",
+    "mail":"vlad@gmail.com",
+    "password": "vlad",
+    "isProfesor": true,
+    "nrMaximStudenti":8
+}
+
+
+{
+    "nume":"andreea",
+    "mail":"andreea@gmail.com",
+    "password": "andreea",
+    "isProfesor": false
+}

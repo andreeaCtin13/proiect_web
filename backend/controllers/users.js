@@ -187,6 +187,7 @@ const controller = {
     if (filter.status) whereClause.status = { [EqOp]: filter.status };
     if (filter.nume) whereIncludeClause.nume = { [LikeOp]: `%${filter.nume}` };
 
+    // sa incerc sa plec de la student - si poate merge
     await requestsModel
       .findAndCountAll({
         include: [
