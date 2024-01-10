@@ -1,4 +1,0 @@
-CREATE USER 'c'@'localhost' IDENTIFIED BY '1234';
-GRANT ALL PRIVILEGES 'c'@'localhost';
-FLUSH PRIVILEGES;
-
