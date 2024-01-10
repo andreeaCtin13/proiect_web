@@ -140,6 +140,39 @@ const controller = {
         return res.status(500).send({ message: "server error", err: err });
       });
   },
+
+  getAllAcceptedStudents: async (req, res) => {
+    const id_teacher = req.params.idTeacher;
+    const filter = req.query;
+    if (!filter.take) filter.take = 10;
+
+    if (!filter.skip) filter.skip = 1;
+
+    let whereIncludeClause = {};
+
+    whereIncludeClause.status = { [OrOp]: ["accepted", "loading", "final"] };
+
+    await usersModel
+      .findAndCountAll({
+        include: [
+          {
+            model: requestsModel,
+            required: true,
+            where: { teacherId: id_teacher, ...whereIncludeClause },
+          },
+        ],
+        where: { idUser: id_teacher },
+        limit: parseInt(filter.take),
+        offset: parseInt(filter.skip - 1) * parseInt(filter.take),
+      })
+      .then((rezultat) => {
+        return res.status(200).send({ requests: rezultat });
+      })
+      .catch((err) => {
+        return res.status(500).send({ message: "server error", err: err });
+      });
+  },
+
   getAllTeachersWithFilterAndPagination: async (req, res) => {
     const filter = req.query;
     if (!filter.take) filter.take = 10;

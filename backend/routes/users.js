@@ -20,5 +20,9 @@ router.get(
   useriController.getTechersRequestsStatusWithFilterAndPagination
 );
 router.get("/getUserByID/:id", useriController.getUserByID);
+router.get(
+  "/getAllAcceptedStudents/:idTeacher/accepted_query",
+  useriController.getAllAcceptedStudents
+);
 
 module.exports = router;

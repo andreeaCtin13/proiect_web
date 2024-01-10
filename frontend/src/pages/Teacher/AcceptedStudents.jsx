@@ -104,7 +104,7 @@ function AcceptedStudents() {
 
   return (
     <div className={style.mainContainer}>
-      <h1>Accepted Students</h1>
+      <h1>Accepted Requests</h1>
       <Link className={style.backButton} to={"/teacher/students-requests"}>
         <div >&lt;</div>
       </Link>
@@ -121,19 +121,7 @@ function AcceptedStudents() {
           dataKey="id_request"
           emptyMessage="No students found."
           tableStyle={{ minWidth: "50rem" }}
-        >
-          <Column
-            field="nume"
-            header="Name"
-            sortable
-            style={{ width: "25%" }}
-          ></Column>
-          <Column
-            field="mail"
-            header="Mail"
-            sortable
-            style={{ width: "25%" }}
-          ></Column>
+        >      
           <Column
             field="tematica"
             header="Titlu Disertatie"

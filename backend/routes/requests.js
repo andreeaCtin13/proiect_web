@@ -21,5 +21,8 @@ router.post(
   requestsController.uploadFile
 );
 router.get("/getFilePath/:id", requestsController.getFilePath);
-
+router.get(
+  "/getAllAcceptedRequestsOfATeacher/:id_teacher/teacher_query",
+  requestsController.getAllAcceptedRequestsOfATeacher
+);
 module.exports = router;

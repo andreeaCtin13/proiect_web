@@ -2,6 +2,7 @@ const requestModel = require("../models").requests;
 const usersModel = require("../models").users;
 const multer = require("multer");
 const { PassThrough } = require("stream");
+const { OrOp } = require("./operators");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -162,6 +163,31 @@ const controller = {
       console.error("Error downloading file:", err);
       return res.status(500).send({ message: "Server ERROR", err: err });
     }
+  },
+
+  getAllAcceptedRequestsOfATeacher: async (req, res) => {
+    const id_teacher = req.params.id_teacher;
+    const filter = req.query;
+    if (!filter.take) filter.take = 10;
+
+    if (!filter.skip) filter.skip = 1;
+    let whereClause = {};
+    whereClause.status = { [OrOp]: ["accepted", "loading", "final"] };
+
+    await requestModel
+      .findAndCountAll({
+        where: { teacherId: id_teacher, ...whereClause },
+        limit: parseInt(filter.take),
+        offset: parseInt(filter.skip - 1) * parseInt(filter.take),
+      })
+      .then((requests) => {
+        console.log(requests);
+        res.status(200).json(requests);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({ message: "server error", err: err });
+      });
   },
 };
 
