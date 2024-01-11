@@ -95,7 +95,7 @@ function AcceptedStudents() {
     e.preventDefault()
 
     try{
-      const response = await axios.get("http://localhost:9000/requests/getFilePath/1")
+      const response = await axios.get(`http://localhost:9000/requests/getFilePath/${selectedRow.id_request}`)
       console.log(response.data)
       let name = response.data.split("\\")
       console.log(name[2])

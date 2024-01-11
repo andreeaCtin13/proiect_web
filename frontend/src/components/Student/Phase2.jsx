@@ -13,7 +13,7 @@ function Phase2({reqId, setReqId}) {
     const formData = new FormData();
     formData.append("file", file);
     await axios
-      .post("http://localhost:9000/requests//uploadFile/1", formData)
+      .post(`http://localhost:9000/requests/uploadFile/${reqId}`, formData)
       .then((res) => {
         console.log(res.status)
         toast.success("🦄 Your file has been uploaded", {

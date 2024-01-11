@@ -13,13 +13,14 @@ function CurrentStatusPage() {
 
   const [status, setStatus] = useState("pending")
   const [reqId,setReqId] = useState()
-  console.log("global user", globalUser)
 
 
   const GetReq = async() => {
-    const req = await axios.get(`http://localhost:9000/requests/findAcceptedRequestOfAStudent/${globalUser.idUser}`)
-    setStatus(req.data.status)
-    setReqId(req.data.id_request)
+    if(globalUser.id_profesor_asociat!==null){
+      const req = await axios.get(`http://localhost:9000/requests/findAcceptedRequestOfAStudent/${globalUser.idUser}`)
+      setStatus(req.data.status)
+      setReqId(req.data.id_request)
+    }
   }
 
   const UpdateUser = async() => {
@@ -34,8 +35,6 @@ function CurrentStatusPage() {
     UpdateUser()
     GetReq()
   },[])
-
-
 
   return (
     <div className={style.mainContainer}>
