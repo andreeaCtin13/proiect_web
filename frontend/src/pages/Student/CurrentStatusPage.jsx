@@ -32,6 +32,7 @@ function CurrentStatusPage() {
   console.log(globalUser)
   useEffect(()=>{
     UpdateUser()
+    GetReq()
   },[])
 
 
