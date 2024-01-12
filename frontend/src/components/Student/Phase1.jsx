@@ -21,6 +21,7 @@ function Phase1() {
     const [page, setPage] = useState(1)
     const [totalRec, setTotalRec]=useState(1)
     const { globalUser, setGlobalUser } = useContext(UserContext);
+    const [teacherName, setTeacherName] = useState("")
 
     const loadData=async()=>{
       const teacher_query = "teacher_query?"
@@ -68,11 +69,7 @@ function Phase1() {
       }
     };
     const [selectedRequests, setSelectedRequests] = useState(null);
-   
-    const statuses = [
-      "rejected",
-      "pending",
-    ];
+
   
     const getSeverity = (status) => {
       switch (status) {
@@ -102,8 +99,16 @@ function Phase1() {
 
     const [showModal, setShowModal] = useState(false);
 
-    const onRowSelect = (event) => {
+
+    
+
+    const onRowSelect = async(event) => {
       setSelectedRow(event.data);
+      console.log(selectedRow)
+      const data = await axios.get(`http://localhost:9000/users/getUserByID/${selectedRow.teacherId}`)
+      
+      setTeacherName(data.data.user.nume)
+
       setShowModal(true);
     };
   
@@ -162,10 +167,11 @@ function Phase1() {
         <Modal
         visible={showModal}
         onHide={onHide}
-        header={selectedRow ? selectedRow.nume : ""}
+        header={`Professor ${teacherName}`}
         content=
         {
-          selectedRow?selectedRow.status==="rejected"?<p>{selectedRow.feedback}</p>:<p>Nu exista feedback acordat cererii</p>:<p>eroare</p>
+        
+          selectedRow?selectedRow.status==="rejected"?<p>{selectedRow.feedback}</p>:<p>You did't receive any feedback yet.</p>:<p>eroare</p>
         } 
       />      </div>
     </div>

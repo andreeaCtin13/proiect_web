@@ -1,14 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from "../../styles/student/CurrentStatusPage.module.css";
 import Button  from '../../components/General/Button';
 import axios from "axios"
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 
-function Phase2({reqId, setReqId}) {
+function Phase2({reqId, setReqId, idProf}) {
   const [file, setFile] = useState();
-  const teacher="Toma Cristian";
+  const [teacher, setTeacher] = useState("")
   console.log(reqId)
+
+  const getName = async()=>{
+    console.log(idProf)
+    const data = await axios.get(`http://localhost:9000/users/getUserByID/${idProf}`)
+    console.log("DATA", data)
+    setTeacher(data.data.user.nume)
+  }
+  useEffect(()=>{
+    getName()
+  })
+
+
   const sendFile = async() =>{
     const formData = new FormData();
     formData.append("file", file);
