@@ -199,27 +199,43 @@ const controller = {
   },
   getTechersRequestsStatusWithFilterAndPagination: async (req, res) => {
     const { id_student } = req.params;
+    console.log(id_student);
     const filter = req.query;
     if (!filter.take) filter.take = 10;
 
     if (!filter.skip) filter.skip = 1;
 
     let whereClause = {};
-    let whereIncludeClause = {};
     if (filter.status) whereClause.status = { [EqOp]: filter.status };
-    if (filter.nume) whereIncludeClause.nume = { [LikeOp]: `%${filter.nume}` };
 
-    // sa incerc sa plec de la student - si poate merge
     await requestsModel
       .findAndCountAll({
-        include: [
-          {
-            model: usersModel,
-            as: "teacherRequests",
-            where: whereIncludeClause,
-          },
-        ],
         where: { ...whereClause, studentId: id_student },
+        limit: parseInt(filter.take),
+        offset: parseInt(filter.skip - 1) * parseInt(filter.take),
+      })
+      .then((rezultat) => {
+        return res.status(200).send({ requests: rezultat });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send({ message: "server error", err: err });
+      });
+  },
+  getAllTeachersRequest: async (req, res) => {
+    const { id_teacher } = req.params;
+    console.log(id_teacher);
+    const filter = req.query;
+    if (!filter.take) filter.take = 10;
+
+    if (!filter.skip) filter.skip = 1;
+
+    let whereClause = {};
+    if (filter.status) whereClause.status = { [EqOp]: filter.status };
+
+    await requestsModel
+      .findAndCountAll({
+        where: { ...whereClause, teacherId: id_teacher },
         limit: parseInt(filter.take),
         offset: parseInt(filter.skip - 1) * parseInt(filter.take),
       })

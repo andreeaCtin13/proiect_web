@@ -116,7 +116,7 @@ function AcceptedStudents() {
     const formData = new FormData();
     formData.append("file", file);
     await axios
-      .post(`http://localhost:9000/requests//uploadFile/${selectedRow.id_request}`, formData)
+      .post(`http://localhost:9000/requests/uploadFile/${selectedRow.id_request}`, formData)
       .then((res) => {
         console.log(res.status)
         toast.success("🦄 Your file has been uploaded", {

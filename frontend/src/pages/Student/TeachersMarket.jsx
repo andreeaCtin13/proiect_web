@@ -174,6 +174,7 @@ const loadData =async () =>{
     }
   return (
     <div className={style.mainContainer}>
+      {globalUser.id_profesor_asociat!==null?<div>ai deja prof, vezi la status</div>:<div>
       <h1>Search for a teacher</h1>
       <div className={style.tableContain}>
         <DataTable value={teachers}  filterDisplay="row" responsiveLayout="scroll" dataKey="idUser"
@@ -221,6 +222,8 @@ const loadData =async () =>{
              <textarea className={style.inputRequest} type="text" onChange={(e)=>{setTitleRequest(e.target.value)}} value={titleRequest} placeholder='Write the subject for your disertation...'/>
               <Button content={"Send request"} className={style.btnSendRequest} onClick={sendRequest}></Button>
             </div>}/>  
+        </div>}
+     
         <ToastContainer
           position="top-right"
           autoClose={5000}

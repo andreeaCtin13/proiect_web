@@ -18,6 +18,7 @@ function CurrentStatusPage() {
   const GetReq = async() => {
     if(globalUser.id_profesor_asociat!==null){
       const req = await axios.get(`http://localhost:9000/requests/findAcceptedRequestOfAStudent/${globalUser.idUser}`)
+      console.log(req)
       setStatus(req.data.status)
       setReqId(req.data.id_request)
     }
@@ -25,17 +26,14 @@ function CurrentStatusPage() {
 
   const UpdateUser = async() => {
     const userUpdated = await axios.get(`http://localhost:9000/users/getUserByID/${globalUser.idUser}`)
-    setGlobalUser(userUpdated)
-    if(userUpdated.id_profesor_asociat !==null){
-      GetReq()
-    }
+    setGlobalUser(userUpdated.data.user)
+
   }
-  console.log(globalUser)
   useEffect(()=>{
     UpdateUser()
     GetReq()
   },[])
-
+console.log("ID", globalUser)
   return (
     <div className={style.mainContainer}>
       <h1 className={style.h1}>Your current status</h1>

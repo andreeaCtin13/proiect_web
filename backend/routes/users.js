@@ -25,4 +25,9 @@ router.get(
   useriController.getAllAcceptedStudents
 );
 
+router.get(
+  "/getAllTeachersRequestFromTeacherHomepage/:id_teacher/teacher_query",
+  useriController.getAllTeachersRequest
+);
+
 module.exports = router;

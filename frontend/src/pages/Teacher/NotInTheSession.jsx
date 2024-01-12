@@ -1,9 +1,12 @@
 import React from 'react'
+import style from "../../styles/teacher/NotInASession.module.css"
+import Button from '../../components/General/Button'
 
 function NotInTheSession() {
   return (
-    <div>
-      SORRY BUT you, are not in a disponible session for admiting students
+    <div className={style.mainContainer}>
+      Sorry, you are not in a valid session
+      <Button content={"Logout"}></Button>
     </div>
   )
 }

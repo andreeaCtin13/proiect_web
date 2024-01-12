@@ -26,6 +26,7 @@ function Phase1() {
       const teacher_query = "teacher_query?"
       
       const data = await axios.get(`http://localhost:9000/users/getAllTeachersRequests/${globalUser.idUser}/${teacher_query}&take=8&skip=${page}`)
+      console.log("RECEIVED ", data)
       if(data.data.requests.count<=8){
         setTotalRec(1)
       }
@@ -41,10 +42,9 @@ function Phase1() {
 
       for(let obj in data.data.requests.rows)
       {  
-        let {id_request, status, feedback, teacherRequests,tematica } =data.data.requests.rows[obj]
-        let {nume, mail} = teacherRequests
+        let {id_request, status, feedback, tematica, teacherId } =data.data.requests.rows[obj]
         req.push({
-          id_request, nume, mail, status,tematica, feedback
+          id_request, status,tematica, feedback, teacherId
         })
       }
       setRequests(req)
@@ -131,9 +131,15 @@ function Phase1() {
           emptyMessage="No requests made."
           tableStyle={{ minWidth: "50rem" }}
         >
+        <Column
+            field="tematica"
+            header="Tematica"
+            sortable
+            style={{ width: "25%" }}
+          ></Column>
           <Column
-            field="nume"
-            header="Name"
+            field="feedback"
+            header="Feedback"
             sortable
             style={{ width: "25%" }}
           ></Column>

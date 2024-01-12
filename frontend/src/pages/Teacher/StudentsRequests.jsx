@@ -28,17 +28,15 @@ function StudentsRequests() {
   const [feedback, setFeedback] = useState("")
 
   const loadData = async()=>{
-    const students_query = "student_query?status=pending"
+    const teacher_query = "teacher_query?status=pending"
     await 
-    axios.get(`http://localhost:9000/users/getAllStudentsRequest/${globalUser.idUser}/${students_query}&take=8&skip=${page}`).then((response)=>{
+    axios.get(`http://localhost:9000/users/getAllTeachersRequestFromTeacherHomepage/${globalUser.idUser}/${teacher_query}&take=8&skip=${page}`).then((response)=>{
     let students= response.data.requests.rows
-    console.log("STUDENTS", students)
     let req =[] 
     for(let i= 0;i<students.length;i++){
-      let stud = {...students[i].studentRequests}
       let {status, tematica, id_request, studentId}=students[i]
       req.push({
-        id_request, status, tematica, studentId,...stud
+        id_request, status, tematica, studentId
       })
       if(response.data.requests.count<=8){
         setTotalRec(1)
@@ -86,15 +84,19 @@ function StudentsRequests() {
     const [studentSelectat, setStudentSelectat] = useState({})
     const [showModal, setShowModal] = useState(false);
     const [showModalRow, setShowModalRow] = useState(false);
+    const [isTaken, setIsTaken] = useState(false)
+
+
 
     const onRowSelect = async (event) => {
-        console.log(event.data)
       let student = await axios.get(`http://localhost:9000/users/getUserByID/${event.data.studentId}`)
-      console.log("student : ",student)
       setStudentSelectat(student.data.user)
+      setIsTaken(!(student.data.user.id_profesor_asociat===null))
       setSelectedRow(event.data);
       setShowModalRow(true);
     };
+    console.log(isTaken)
+
 
     const showModalFunction = ()=>{
       setShowModal(true);
@@ -213,6 +215,7 @@ function StudentsRequests() {
               {studentSelectat.nume} - {studentSelectat.mail}
             </div>
               {
+                isTaken===true ?<div>The student is taken.</div>:
                 declined === false ? <div className={style.contentModal}>
                   <Button content={"Accept it"} className={style.btnAccept} onClick={()=>{
                     updateRequestStatus("accepted", selectedRow.id_request)
