@@ -65,7 +65,6 @@
   font-size: 1.3rem;
 }
 .takenContainer {
-  background-color: var(--var--ciocolatte);
   height: 100vh;
   font-size: 3rem;
   display: flex;

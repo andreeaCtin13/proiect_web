@@ -174,7 +174,7 @@ const loadData =async () =>{
     }
   return (
     <div className={style.mainContainer}>
-      {globalUser.id_profesor_asociat!==null?<div>ai deja prof, vezi la status</div>:<div>
+      {globalUser.id_profesor_asociat!==null?<div className={style.takenContainer}>One of your requests has been accepted!!! Please check your status page.</div>:<div>
       <h1>Search for a teacher</h1>
       <div className={style.tableContain}>
         <DataTable value={teachers}  filterDisplay="row" responsiveLayout="scroll" dataKey="idUser"

@@ -3,6 +3,10 @@
   background-color: var(--var--ciocolatte);
 }
 
+h2 {
+  margin: 0;
+}
+
 .backgroundImage {
   background-position: center;
   max-height: 100vh;
@@ -11,7 +15,7 @@
 }
 .form {
   position: absolute;
-  top: 5%;
+  top: 2%;
   left: 20%;
   padding: 1rem;
   border-radius: 1rem;
@@ -52,4 +56,17 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
+}
+
+.input {
+  border-radius: 2rem;
+  padding: 0.5rem;
+  width: 20rem;
+  border: none;
+}
+.formRow {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 0 3rem 2rem;
 }

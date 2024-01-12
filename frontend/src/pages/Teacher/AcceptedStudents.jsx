@@ -115,6 +115,7 @@ function AcceptedStudents() {
   const updateFile = async() =>{
     const formData = new FormData();
     formData.append("file", file);
+    if(file!=null){
     await axios
       .post(`http://localhost:9000/requests/uploadFile/${selectedRow.id_request}`, formData)
       .then((res) => {
@@ -144,6 +145,19 @@ function AcceptedStudents() {
         });
         console.log(er)
       });
+    }
+    else{
+      toast.error("Sorry, but you have to upload a file first", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
   }
 
   return (
@@ -199,7 +213,7 @@ function AcceptedStudents() {
                 Upload the file signed
                 <br />
                 <input type="file" name="file"  onChange={(e) => setFile(e.target.files[0])}/>
-                <button onClick={updateFile}>Send file</button>
+                <Button onClick={updateFile} className={style.btnSendFile} content="Send file"></Button>
               </div>
             </div>}/>
 
