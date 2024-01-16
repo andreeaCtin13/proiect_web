@@ -37,7 +37,7 @@ console.log("ID", globalUser)
   return (
     <div className={style.mainContainer}>
       <h1 className={style.h1}>Your current status</h1>
-      {globalUser.id_profesor_asociat===null?<Phase1></Phase1>:(status==="accepted"?<Phase2 reqId={reqId} setReqId={setReqId} idProf ={globalUser.id_profesor_asociat}></Phase2>:(status==="loading"? <Phase3></Phase3>:<Phase4></Phase4>))}
+      {globalUser.id_profesor_asociat===null?<Phase1></Phase1>:(status==="accepted"?<Phase2 reqId={reqId} setReqId={setReqId} idProf ={globalUser.id_profesor_asociat}></Phase2>:(status==="loading"? <Phase3></Phase3>:<Phase4 reqId={reqId}></Phase4>))}
     </div>
   );
 }

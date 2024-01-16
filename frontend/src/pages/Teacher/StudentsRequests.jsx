@@ -143,11 +143,11 @@ function StudentsRequests() {
             progress: undefined,
             theme: "dark",
           });
+          return
         }
         else{
           new_req = {...new_req, feedback:feedback}
         }
-        return
       }
       await axios.put(`http://localhost:9000/requests/updateRequest/${id}`,new_req).then((resp)=>{
         console.log("response update: ", resp)

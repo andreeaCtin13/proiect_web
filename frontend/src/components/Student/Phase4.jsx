@@ -3,12 +3,12 @@ import style from "../../styles/student/CurrentStatusPage.module.css";
 import Button from "../General/Button";
 import Cheers from "../../images/cheers.png"
 import axios from "axios"
-function Phase4() {
+function Phase4({reqId}) {
   const downloadFile = async(e) =>{
     e.preventDefault()
 
     try{
-      const response = await axios.get("http://localhost:9000/requests/getFilePath/1")
+      const response = await axios.get(`http://localhost:9000/requests/getFilePath/${reqId}`)
       console.log(response.data)
       let name = response.data.split("\\")
       console.log(name[2])

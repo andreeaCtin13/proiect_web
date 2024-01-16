@@ -104,8 +104,8 @@ function Phase1() {
 
     const onRowSelect = async(event) => {
       setSelectedRow(event.data);
-      console.log(selectedRow)
-      const data = await axios.get(`http://localhost:9000/users/getUserByID/${selectedRow.teacherId}`)
+      console.log(event.data)
+      const data = await axios.get(`http://localhost:9000/users/getUserByID/${event.data.teacherId}`)
       
       setTeacherName(data.data.user.nume)
 
