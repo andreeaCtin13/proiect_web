@@ -183,8 +183,8 @@ const register=async(e)=>{
       <h2>Create your account</h2>
       <Form inputs = {fields}></Form>
       <div  className={`${style.formRow} ${visible === false? style.displayNone:style.displayBlock}`}>
-        <label  className={style.label} htmlFor={"nrMaximStudenti"}>Nr.maxim studenti</label>
-        <input name={"nrMaximStudenti"} className={style.input} id={"nrMaximStudenti"} type={"number"}  onChange={(e)=>onChange(e, "nrMaximStudenti")} />                                      
+        <label  className={`${visible === false? style.displayNone:style.label}`} htmlFor={"nrMaximStudenti"}>Nr.maxim studenti</label>
+        <input name={"nrMaximStudenti"} className={`${visible === false? style.displayNone:style.input}`} id={"nrMaximStudenti"} type={"number"}  onChange={(e)=>onChange(e, "nrMaximStudenti")} />                                      
       </div>
       <div className={style.btnZone}>
       <Link to="/login" className={style.link}>
